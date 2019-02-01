@@ -6,6 +6,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import noesis.performancealerts.model.RunTest;
+
 public class RunTestJPADAO {
 	private static RunTestJPADAO instance;
 	protected EntityManager entityManager;

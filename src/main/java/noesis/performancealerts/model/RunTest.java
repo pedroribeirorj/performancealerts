@@ -1,4 +1,4 @@
-package noesis.performancealerts.dao;
+package noesis.performancealerts.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -17,7 +17,7 @@ public class RunTest {
 	@Column
 	int id_run;
 	@Column
-	boolean status;
+	int status;
 	public int getId() {
 		return id;
 	}
@@ -36,10 +36,10 @@ public class RunTest {
 	public void setId_run(int id_run) {
 		this.id_run = id_run;
 	}
-	public boolean isStatus() {
+	public int getStatus() {
 		return status;
 	}
-	public void setStatus(boolean status) {
+	public void setStatus(int status) {
 		this.status = status;
 	}
 	
