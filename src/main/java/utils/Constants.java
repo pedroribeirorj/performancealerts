@@ -62,7 +62,8 @@ public class Constants {
 
 	// listas de emails
 	public static final String emailsOperacao = "pedroribeiro@id.uff.br";
-	public static final String emailsGerencia = "pedro.h.silva@noesis.pt, renata.l.pinto@noesis.net.br, jose.cardoso@noesis.net.br";
+//	public static final String emailsGerencia = "pedro.h.silva@noesis.pt, renata.l.pinto@noesis.net.br, jose.cardoso@noesis.net.br";
+	public static final String emailsGerencia = "pedro.h.silva@noesis.pt";
 	
 	
 }

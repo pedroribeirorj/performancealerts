@@ -21,6 +21,7 @@ public class Regras {
 		if (r.analisaSequenciaErros(casoDeTeste)) {
 			v.setGravidadeViolacao(Constants.GRAVIDADE_VIOLACAO_CRITICA);
 			v.setTipoViolacao(Constants.VIOLACAO_POR_MAXIMO_FALHAS_SEGUIDAS);
+			return v;
 		}
 
 		// valida violacao de regra de indisponibilidade
@@ -38,13 +39,13 @@ public class Regras {
 		int contador = 0;
 		for (Iterator iterator = j.iterator(); iterator.hasNext();) {
 			CasoDeTeste casoDeTeste = (CasoDeTeste) iterator.next();
-			if (casoDeTeste.getRunTest().getStatus() == Constants.STATUS_PASSED) {
+			if (casoDeTeste.getRunTest().getStatus() == Constants.STATUS_FAILED) {
 				contador++;
 			} else {
 				contador = 0;
 			}
-			if (contador == Constants.MAXIMO_FALHAS_SEGUIDAS_PERMITIDAS)
-				return false;
+			if (contador > Constants.MAXIMO_FALHAS_SEGUIDAS_PERMITIDAS)
+				return true;
 		}
 		return contador > Constants.MAXIMO_FALHAS_SEGUIDAS_PERMITIDAS;
 	}
