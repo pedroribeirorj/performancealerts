@@ -1,6 +1,6 @@
 package noesis.performancealerts.model;
 
-public class Jornada {
+public class CasoDeTeste {
 	Run run;
 	RunTest runTest;
 	Test test;

@@ -12,12 +12,13 @@ import javax.persistence.TypedQuery;
 
 import com.google.gson.Gson;
 
-import noesis.performancealerts.model.Jornada;
+import noesis.performancealerts.model.CasoDeTeste;
 import noesis.performancealerts.model.Run;
 import noesis.performancealerts.model.RunTest;
 import noesis.performancealerts.model.Task;
 import noesis.performancealerts.model.TaskLog;
 import noesis.performancealerts.model.Test;
+import utils.Constants;
 
 public class RunJPADAO {
 
@@ -97,46 +98,37 @@ public class RunJPADAO {
 		}
 	}
 
-	public Jornada montaJornada(Object[] vetObj) {
+	public CasoDeTeste montaCasodeTeste(Object[] vetObj) {
 		Run r = (Run) vetObj[0];
 		RunTest rt = (RunTest) vetObj[1];
 		Test t = (Test) vetObj[2];
-		
-		Jornada j = new Jornada();
+
+		CasoDeTeste j = new CasoDeTeste();
 		j.setRun(r);
 		j.setRunTest(rt);
 		j.setTest(t);
 		return j;
 	}
 
-	public List<Jornada> recuperaJornadasPorSuite(String suiteId) {
-		Query q = entityManager.createQuery(utils.Constants.RECUPERA_JORNADAS_POR_SUITES);
-		q.setParameter("test_cycle_id", suiteId);
+	public List<CasoDeTeste> recuperaCasosDeTestePorSuite(String suiteId, int idCasoDeTeste) {
+		// recupera as 100 jornadas mais recentes de uma suíte
+
+		Query q = entityManager
+				.createQuery(Constants.RECUPERA_JORNADAS_POR_SUITES + " limit " + Constants.VOLUME_AMOSTRAL);
+		q.setParameter(1  ,suiteId);
+		q.setParameter( 2, idCasoDeTeste);
 		List query = q.getResultList();
 
-		List<Jornada> jornadas = new ArrayList<Jornada>();
+		List<CasoDeTeste> casoDeTestes = new ArrayList<CasoDeTeste>();
 
 		for (Iterator iterator = query.iterator(); iterator.hasNext();) {
 			// Query contém os registros da consulta
 			// Cada objeto é uma linha, que será dividida em classes
 			Object[] object = (Object[]) iterator.next();
-			Jornada j = montaJornada(object);
-			jornadas.add(j);
+			CasoDeTeste j = montaCasodeTeste(object);
+			casoDeTestes.add(j);
 		}
-		return jornadas;
-
-//		Gson g = new Gson();
-//		String objetoToJson = g.toJson(r);
-//		String objetoToJson1 = g.toJson(rt);
-//		String objetoToJson2 = g.toJson(t);
-//		String objetoToJson3 = g.toJson(task);
-//		String objetoToJson4 = g.toJson(tl);
-//		
-//		System.out.println(objetoToJson);
-//		System.out.println(objetoToJson1);
-//		System.out.println(objetoToJson2);
-//		System.out.println(objetoToJson3);
-//		System.out.println(objetoToJson4);
+		return casoDeTestes;
 
 	}
 }

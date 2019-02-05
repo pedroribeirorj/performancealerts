@@ -43,6 +43,9 @@ public class RunTest {
 		this.status = status;
 	}
 	
+	public boolean isPassed() {
+		return status == utils.Constants.STATUS_PASSED;
+	}
 	
 	
 }

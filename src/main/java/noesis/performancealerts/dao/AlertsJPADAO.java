@@ -1,5 +1,7 @@
 package noesis.performancealerts.dao;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -7,22 +9,24 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
-import noesis.performancealerts.model.RunTest;
+import noesis.performancealerts.model.CasoDeTeste;
+import noesis.performancealerts.model.Alerts;
+import noesis.performancealerts.model.Test;
 import utils.Constants;
 
-public class RunTestJPADAO {
-	private static RunTestJPADAO instance;
+public class AlertsJPADAO {
+	private static AlertsJPADAO instance;
 	protected EntityManager entityManager;
 
-	public static RunTestJPADAO getInstance() {
+	public static AlertsJPADAO getInstance() {
 		if (instance == null) {
-			instance = new RunTestJPADAO();
+			instance = new AlertsJPADAO();
 		}
 
 		return instance;
 	}
 
-	private RunTestJPADAO() {
+	private AlertsJPADAO() {
 		entityManager = getEntityManager();
 	}
 
@@ -35,27 +39,19 @@ public class RunTestJPADAO {
 		return entityManager;
 	}
 
-	public RunTest getById(final int id) {
-		return entityManager.find(RunTest.class, id);
+	public Alerts getById(final int id) {
+		return entityManager.find(Alerts.class, id);
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<RunTest> findAll() {
-		return entityManager.createQuery("FROM " + RunTest.class.getName()).getResultList();
+	public List<Alerts> findAll() {
+		return entityManager.createQuery("FROM " + Alerts.class.getName()).getResultList();
 	}
 
-	public List<Integer> findTestsByRunID(int id_run) {
-		Query q = entityManager
-				.createQuery("select distinct id_test FROM " + RunTest.class.getName() + " where id_run = :id_run");
-		q.setParameter("id_run", id_run);
-		List l = q.getResultList();
-		return l;
-	}
-
-	public void persist(RunTest RunTest) {
+	public void persist(Alerts Alerts) {
 		try {
 			entityManager.getTransaction().begin();
-			entityManager.persist(RunTest);
+			entityManager.persist(Alerts);
 			entityManager.getTransaction().commit();
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -63,10 +59,10 @@ public class RunTestJPADAO {
 		}
 	}
 
-	public void merge(RunTest RunTest) {
+	public void merge(Alerts Alerts) {
 		try {
 			entityManager.getTransaction().begin();
-			entityManager.merge(RunTest);
+			entityManager.merge(Alerts);
 			entityManager.getTransaction().commit();
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -74,11 +70,11 @@ public class RunTestJPADAO {
 		}
 	}
 
-	public void remove(RunTest RunTest) {
+	public void remove(Alerts Alerts) {
 		try {
 			entityManager.getTransaction().begin();
-			RunTest = entityManager.find(RunTest.class, RunTest.getId());
-			entityManager.remove(RunTest);
+			Alerts = entityManager.find(Alerts.class, Alerts.getId());
+			entityManager.remove(Alerts);
 			entityManager.getTransaction().commit();
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -88,8 +84,8 @@ public class RunTestJPADAO {
 
 	public void removeById(final int id) {
 		try {
-			RunTest RunTest = getById(id);
-			remove(RunTest);
+			Alerts Alerts = getById(id);
+			remove(Alerts);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
