@@ -29,7 +29,7 @@ public class Mail {
 		});
 
 		/** Ativa Debug para sessão */
-		session.setDebug(true);
+		session.setDebug(false);
 
 		try {
 

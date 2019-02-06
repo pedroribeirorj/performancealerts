@@ -2,6 +2,9 @@ package noesis.performancealerts.controller;
 
 import java.util.GregorianCalendar;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import noesis.performancealerts.dao.AlertsJPADAO;
 import noesis.performancealerts.dao.RunJPADAO;
 import noesis.performancealerts.dao.TestJPADAO;
@@ -14,6 +17,8 @@ import utils.Mail;
 import utils.Utils;
 
 public class AlertsController {
+	static Logger logger = LoggerFactory.getLogger(AlertsController.class.getName());
+	
 	public static void emitirAlerta(int idSuite, int idCasoDeTeste, Violacao v) {
 		Run suite = RunJPADAO.getInstance().getById(idSuite);
 		Test ct = TestJPADAO.getInstance().getById(idCasoDeTeste);
@@ -33,11 +38,12 @@ public class AlertsController {
 
 	private static void atualizarStatusAlerta(Alerts alerta) {
 		AlertsJPADAO.getInstance().persist(alerta);
+		logger.error("[PerformanceAlerts] Emissão de alerta persistido na base de dados.");
 	}
 
 	private String montaCorpoEmail(Violacao v, String canal, String casoDeTeste) {
 		String texto = "A Monitoria de Performance identificou um problema no canal " + canal + ", na jornada "
-				+ casoDeTeste + ".\n";
+				+ casoDeTeste + ".";
 		if (v.violacaoFalhasSeguidas()) {
 			texto += "A jornada obteve falhas seguidas acima do permitido.";
 		} else {
@@ -58,11 +64,12 @@ public class AlertsController {
 
 	private void enviarEmailOperacao(String texto) {
 		Mail.enviarEmail(texto, Constants.emailsOperacao, "[MONITORIA-TIM] Erro de Performance");
-
+		logger.error("[PerformanceAlerts] E-mail enviado para equipe operacional.");
 	}
 
 	private void enviarEmailGerencia(String texto) {
 		Mail.enviarEmail(texto, Constants.emailsOperacao + "," + Constants.emailsGerencia,
 				"[MONITORIA-TIM] Erro de Performance");
+		logger.error("[PerformanceAlerts] E-mail enviado para equipe operacional e gerencial.");
 	}
 }

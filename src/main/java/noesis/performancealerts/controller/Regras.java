@@ -1,15 +1,25 @@
-package noesis.performancealerts.model;
+package noesis.performancealerts.controller;
 
 import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import utils.Constants;
 import utils.Utils;
 import noesis.performancealerts.dao.RunJPADAO;
+import noesis.performancealerts.model.CasoDeTeste;
+import noesis.performancealerts.model.Violacao;
 
 public class Regras {
+	static Logger logger = LoggerFactory.getLogger(Regras.class.getName());
+
 	public static Violacao analisaConformidade(String idSuite, int idCasoDeTeste) {
+
 		// analisa se há inconformidade para um caso de teste de uma suíte considerando
+
 		// um volume amostral e regras de negócio
 		Regras r = new Regras();
 		List<CasoDeTeste> casoDeTeste = RunJPADAO.getInstance().recuperaCasosDeTestePorSuite(idSuite, idCasoDeTeste);
@@ -19,6 +29,7 @@ public class Regras {
 
 		// valida existencia de sequencia de erros além do permitido
 		if (r.analisaSequenciaErros(casoDeTeste)) {
+			logger.error("[PerformanceAlerts] Identificado caso de teste com erros em sequência.");
 			v.setGravidadeViolacao(Constants.GRAVIDADE_VIOLACAO_CRITICA);
 			v.setTipoViolacao(Constants.VIOLACAO_POR_MAXIMO_FALHAS_SEGUIDAS);
 			return v;
@@ -27,12 +38,14 @@ public class Regras {
 		// valida violacao de regra de indisponibilidade
 		Object obj = r.analisaDisponibilidade(casoDeTeste);
 		if (obj != null) {
+			logger.info("[PerformanceAlerts] Identificado caso de teste com erro de indisponibilidade.");
 			return (Violacao) obj;
 		}
 
-		// valida violacao de regra de latência - aguardando desenvolvimento Portugal
-
+		// valida violacao de regra de latência - aguardando desenvolvimento Portugal	
+		
 		return v;
+
 	}
 
 	public boolean analisaSequenciaErros(List<CasoDeTeste> j) {
