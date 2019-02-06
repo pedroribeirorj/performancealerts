@@ -13,15 +13,15 @@ import noesis.performancealerts.dao.RunJPADAO;
 import noesis.performancealerts.model.CasoDeTeste;
 import noesis.performancealerts.model.Violacao;
 
-public class Regras {
-	static Logger logger = LoggerFactory.getLogger(Regras.class.getName());
+public class Regra {
+	static Logger logger = LoggerFactory.getLogger(Regra.class.getName());
 
-	public static Violacao analisaConformidade(String idSuite, int idCasoDeTeste) {
+	public static Violacao analisaConformidade(String idSuite, int idCasoDeTeste) throws Exception {
 
 		// analisa se há inconformidade para um caso de teste de uma suíte considerando
 
 		// um volume amostral e regras de negócio
-		Regras r = new Regras();
+		Regra r = new Regra();
 		List<CasoDeTeste> casoDeTeste = RunJPADAO.getInstance().recuperaCasosDeTestePorSuite(idSuite, idCasoDeTeste);
 		if (casoDeTeste.size() == 0)
 			return null;
@@ -42,8 +42,8 @@ public class Regras {
 			return (Violacao) obj;
 		}
 
-		// valida violacao de regra de latência - aguardando desenvolvimento Portugal	
-		
+		// valida violacao de regra de latência - aguardando desenvolvimento Portugal
+
 		return v;
 
 	}
@@ -83,7 +83,7 @@ public class Regras {
 
 	}
 
-	public Violacao analisaDisponibilidade(List<CasoDeTeste> j) {
+	public Violacao analisaDisponibilidade(List<CasoDeTeste> j) throws Exception {
 		double disponibilidade = getDisponibilidade(j);
 		Violacao v = new Violacao();
 		if (disponibilidadeOK(disponibilidade)) {
@@ -99,19 +99,31 @@ public class Regras {
 		return v;
 	}
 
-	public boolean disponibilidadeOK(double disponibilidade) {
-		return disponibilidade >= Constants.THRESHOLD_DISPONIBILIDADE;
+	public boolean disponibilidadeOK(double disponibilidade) throws Exception {
+		if (disponibilidade >= 0 && disponibilidade <= 100)
+			return disponibilidade >= Constants.THRESHOLD_DISPONIBILIDADE;
+		else
+			throw new Exception("Disponibilidade incorreta. O valor deve corresponder ao intervalo [0,100].");
 	}
 
-	public boolean disponibilidadeCritica(double disponibilidade) {
-		return disponibilidade < Constants.THRESHOLD_DISPONIBILIDADE_MINIMA;
+	public boolean disponibilidadeCritica(double disponibilidade) throws Exception {
+		if (disponibilidade >= 0 && disponibilidade <= 100)
+			return disponibilidade < Constants.THRESHOLD_DISPONIBILIDADE_MINIMA;
+		else
+			throw new Exception("Disponibilidade incorreta. O valor deve corresponder ao intervalo [0,100].");
 	}
 
-	public boolean latenciaOK(double latencia) {
-		return latencia >= Constants.THRESHOLD_LATENCIA;
+	public boolean latenciaOK(double latencia) throws Exception {
+		if (latencia >= 0 && latencia <= 100)
+			return latencia >= Constants.THRESHOLD_LATENCIA;
+		else
+			throw new Exception("Disponibilidade incorreta. O valor deve corresponder ao intervalo [0,100].");
 	}
 
-	public boolean latenciaCritica(double latencia) {
-		return latencia < Constants.THRESHOLD_LATENCIA_MINIMA;
+	public boolean latenciaCritica(double latencia) throws Exception {
+		if (latencia >= 0 && latencia <= 100)
+			return latencia < Constants.THRESHOLD_LATENCIA_MINIMA;
+		else
+			throw new Exception("Disponibilidade incorreta. O valor deve corresponder ao intervalo [0,100].");
 	}
 }
