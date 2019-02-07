@@ -25,14 +25,13 @@ public class Regra {
 		List<CasoDeTeste> casoDeTeste = RunJPADAO.getInstance().recuperaCasosDeTestePorSuite(idSuite, idCasoDeTeste);
 		if (casoDeTeste.size() == 0)
 			return null;
-		Violacao v = new Violacao();
 
 		// valida existencia de sequencia de erros além do permitido
-		if (r.analisaSequenciaErros(casoDeTeste)) {
+		int falhasSeguidas = r.analisaSequenciaErros(casoDeTeste);
+		if (falhasSeguidas > Constants.MAXIMO_FALHAS_SEGUIDAS_PERMITIDAS) {
 			logger.error("[PerformanceAlerts] Identificado caso de teste com erros em sequência.");
-			v.setGravidadeViolacao(Constants.GRAVIDADE_VIOLACAO_CRITICA);
-			v.setTipoViolacao(Constants.VIOLACAO_POR_MAXIMO_FALHAS_SEGUIDAS);
-			return v;
+			return new Violacao(Constants.VIOLACAO_POR_MAXIMO_FALHAS_SEGUIDAS, Constants.GRAVIDADE_VIOLACAO_CRITICA,
+					String.valueOf(falhasSeguidas));
 		}
 
 		// valida violacao de regra de indisponibilidade
@@ -41,14 +40,12 @@ public class Regra {
 			logger.info("[PerformanceAlerts] Identificado caso de teste com erro de indisponibilidade.");
 			return (Violacao) obj;
 		}
-
 		// valida violacao de regra de latência - aguardando desenvolvimento Portugal
-
-		return v;
-
+		return null;
 	}
 
-	public boolean analisaSequenciaErros(List<CasoDeTeste> j) {
+	public int analisaSequenciaErros(List<CasoDeTeste> j) {
+
 		int contador = 0;
 		for (Iterator iterator = j.iterator(); iterator.hasNext();) {
 			CasoDeTeste casoDeTeste = (CasoDeTeste) iterator.next();
@@ -57,10 +54,8 @@ public class Regra {
 			} else {
 				contador = 0;
 			}
-			if (contador > Constants.MAXIMO_FALHAS_SEGUIDAS_PERMITIDAS)
-				return true;
 		}
-		return contador > Constants.MAXIMO_FALHAS_SEGUIDAS_PERMITIDAS;
+		return contador;
 	}
 
 	public double getDisponibilidade(List<CasoDeTeste> j) {
@@ -99,31 +94,28 @@ public class Regra {
 		return v;
 	}
 
-	public boolean disponibilidadeOK(double disponibilidade) throws Exception {
-		if (disponibilidade >= 0 && disponibilidade <= 100)
-			return disponibilidade >= Constants.THRESHOLD_DISPONIBILIDADE;
+	public boolean rangeDisponibilidadeLatencia(double valor) throws Exception {
+		if (valor >= 0 && valor <= 100)
+			return true;
 		else
-			throw new Exception("Disponibilidade incorreta. O valor deve corresponder ao intervalo [0,100].");
+			throw new Exception("Valor deve corresponder ao intervalo [0,100].");
+	}
+
+	public boolean disponibilidadeOK(double disponibilidade) throws Exception {
+		return rangeDisponibilidadeLatencia(disponibilidade) && disponibilidade >= Constants.THRESHOLD_DISPONIBILIDADE;
 	}
 
 	public boolean disponibilidadeCritica(double disponibilidade) throws Exception {
-		if (disponibilidade >= 0 && disponibilidade <= 100)
-			return disponibilidade < Constants.THRESHOLD_DISPONIBILIDADE_MINIMA;
-		else
-			throw new Exception("Disponibilidade incorreta. O valor deve corresponder ao intervalo [0,100].");
+		return rangeDisponibilidadeLatencia(disponibilidade)
+				&& disponibilidade < Constants.THRESHOLD_DISPONIBILIDADE_MINIMA;
+
 	}
 
 	public boolean latenciaOK(double latencia) throws Exception {
-		if (latencia >= 0 && latencia <= 100)
-			return latencia >= Constants.THRESHOLD_LATENCIA;
-		else
-			throw new Exception("Disponibilidade incorreta. O valor deve corresponder ao intervalo [0,100].");
+		return rangeDisponibilidadeLatencia(latencia) && latencia >= Constants.THRESHOLD_LATENCIA;
 	}
 
 	public boolean latenciaCritica(double latencia) throws Exception {
-		if (latencia >= 0 && latencia <= 100)
-			return latencia < Constants.THRESHOLD_LATENCIA_MINIMA;
-		else
-			throw new Exception("Disponibilidade incorreta. O valor deve corresponder ao intervalo [0,100].");
+		return rangeDisponibilidadeLatencia(latencia) && latencia < Constants.THRESHOLD_LATENCIA_MINIMA;
 	}
 }

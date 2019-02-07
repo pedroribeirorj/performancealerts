@@ -7,6 +7,16 @@ public class Violacao {
 	int gravidadeViolacao;
 	String value;
 
+	public Violacao(int tipoViolacao, int gravidadeViolacao, String value) {
+		this.tipoViolacao = tipoViolacao;
+		this.gravidadeViolacao = gravidadeViolacao;
+		this.value = value;
+	}
+
+	public Violacao() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public String getValue() {
 		return value;
 	}

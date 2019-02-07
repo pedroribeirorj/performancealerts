@@ -3,7 +3,10 @@ package noesis.performancealerts.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.annotations.common.AssertionFailure;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import noesis.performancealerts.model.Run;
 import static org.mockito.Mockito.*;
@@ -11,6 +14,10 @@ import static org.mockito.Mockito.*;
 public class PerformanceAlertTest {
 	PerformanceAlert performanceAlert;
 
+	@Rule
+	public ExpectedException exceptionRule = ExpectedException.none();
+
+	
 	public PerformanceAlertTest() {
 		performanceAlert = new PerformanceAlert();
 	}
@@ -40,7 +47,9 @@ public class PerformanceAlertTest {
 	@Test
 	public void analisarSuites_ComJornadas() {
 		try {
-			List<Run> suites = mock(List.class);
+			Run r = mock(Run.class);
+			List<Run> suites = new ArrayList<Run>();
+			suites.add(r);
 			performanceAlert.analisarSuites(suites);
 			assert (true);
 		} catch (Exception e) {
@@ -85,6 +94,16 @@ public class PerformanceAlertTest {
 			assert (true);
 		} catch (Exception e) {
 			assert (false);
+		}
+	}
+
+	@Test
+	public void run() {
+		try {
+			performanceAlert.run();
+			assert (true);
+		} catch (Exception e) {
+			assert (true);
 		}
 	}
 }
