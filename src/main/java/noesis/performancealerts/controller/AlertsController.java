@@ -19,7 +19,7 @@ import utils.Utils;
 public class AlertsController {
 	static Logger logger = LoggerFactory.getLogger(AlertsController.class.getName());
 	
-	public static void emitirAlerta(int idSuite, int idCasoDeTeste, Violacao v) {
+	public static void emitirAlerta(int idSuite, int idCasoDeTeste, Violacao v) throws Exception {
 		Run suite = RunJPADAO.getInstance().getById(idSuite);
 		Test ct = TestJPADAO.getInstance().getById(idCasoDeTeste);
 
@@ -54,7 +54,7 @@ public class AlertsController {
 		return texto;
 	}
 
-	private void enviarEmail(String texto, boolean gravidadeCritica) {
+	private void enviarEmail(String texto, boolean gravidadeCritica) throws Exception {
 		if (gravidadeCritica) {
 			enviarEmailGerencia(texto);
 		} else {
@@ -62,14 +62,14 @@ public class AlertsController {
 		}
 	}
 
-	private void enviarEmailOperacao(String texto) {
-		Mail.enviarEmail(texto, Constants.emailsOperacao, "[MONITORIA-TIM] Erro de Performance");
+	private void enviarEmailOperacao(String texto) throws Exception {
+		Mail.enviarEmail(texto, Constants.emailsOperacao, "[MONITORIA-TIM] Erro de Performance", Constants.MAIL_PRD_MODE);
 		logger.error("[PerformanceAlerts] E-mail enviado para equipe operacional.");
 	}
 
-	private void enviarEmailGerencia(String texto) {
+	private void enviarEmailGerencia(String texto) throws Exception {
 		Mail.enviarEmail(texto, Constants.emailsOperacao + "," + Constants.emailsGerencia,
-				"[MONITORIA-TIM] Erro de Performance");
+				"[MONITORIA-TIM] Erro de Performance", Constants.MAIL_PRD_MODE);
 		logger.error("[PerformanceAlerts] E-mail enviado para equipe operacional e gerencial.");
 	}
 }
