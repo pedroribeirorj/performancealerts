@@ -91,6 +91,8 @@ public class RunJPADAO {
 
 	public void remove(Run Run) {
 		try {
+			if (Run == null)
+				return;
 			entityManager.getTransaction().begin();
 			Run = entityManager.find(Run.class, Run.getId_run());
 			entityManager.remove(Run);
@@ -99,6 +101,11 @@ public class RunJPADAO {
 			ex.printStackTrace();
 			entityManager.getTransaction().rollback();
 		}
+	}
+
+	public void rollBack() {
+		if (!entityManager.getTransaction().getRollbackOnly())
+			entityManager.getTransaction().rollback();
 	}
 
 	public void removeById(final int id) {

@@ -30,7 +30,7 @@ public class AlertsController {
 		String casoDeTeste = ct.getName_test();
 
 		String texto = alerts.montaCorpoEmail(v, canal, casoDeTeste);
-		Alerts alerta = new Alerts(v.getValue(), String.valueOf(idSuite), String.valueOf(ct.getId()),
+		Alerts alerta = new Alerts(v.getValue(), idSuite,ct.getId(),
 				String.valueOf(suite.getData()), String.valueOf(v.getTipoViolacao()),
 				String.valueOf(v.getGravidadeViolacao()));
 

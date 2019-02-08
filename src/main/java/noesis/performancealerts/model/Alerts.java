@@ -17,12 +17,11 @@ import javax.persistence.Table;
 @Table(name = "tbl_alerts")
 public class Alerts {
 	@Id
-	@GeneratedValue
-	String id;
+	int id;
 	@Column
-	String id_test;
+	int id_test;
 	@Column
-	String id_run;
+	int id_run;
 	@Column
 	String data;
 	@Column
@@ -36,7 +35,7 @@ public class Alerts {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Alerts(String value, String id_run, String id_test, String data, String typeError, String severity) {
+	public Alerts(String value, int id_run, int id_test, String data, String typeError, String severity) {
 		this.id_test = id_test;
 		this.id_run = id_run;
 		this.data = data;
@@ -45,27 +44,27 @@ public class Alerts {
 		this.value = value;
 	}
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
-	public String getId_test() {
+	public int getId_test() {
 		return id_test;
 	}
 
-	public void setId_test(String id_test) {
+	public void setId_test(int id_test) {
 		this.id_test = id_test;
 	}
 
-	public String getId_run() {
+	public int getId_run() {
 		return id_run;
 	}
 
-	public void setId_run(String id_run) {
+	public void setId_run(int id_run) {
 		this.id_run = id_run;
 	}
 

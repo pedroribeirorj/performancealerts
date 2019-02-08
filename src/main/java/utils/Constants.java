@@ -46,4 +46,7 @@ public class Constants {
 	public static final boolean MAIL_DEBUG_MODE = true;
 	public static final boolean MAIL_PRD_MODE = false;
 	
+	public static final int REPOSITORY_TYPE_ZEPHYR = 1;
+	public static final int REPOSITORY_TYPE_TFS = 2;
+	public static final int REPOSITORY_TYPE_XRAY = 3;
 }

@@ -2,8 +2,6 @@ package noesis.performancealerts.daotest;
 
 import static org.junit.Assert.*;
 
-import java.sql.Timestamp;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -11,11 +9,19 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import noesis.performancealerts.dao.RunJPADAO;
+import noesis.performancealerts.dao.TestJPADAO;
+import noesis.performancealerts.dao.TestJPADAO;
 import noesis.performancealerts.model.Run;
+import utils.Constants;
 
-public class RunJPADAOTest {
-	static Run run;
-	static RunJPADAO dao;
+import static org.mockito.Mockito.*;
+
+import java.sql.Timestamp;
+
+public class TestTest {
+
+	static noesis.performancealerts.model.Test test;
+	static TestJPADAO dao;
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
@@ -28,15 +34,23 @@ public class RunJPADAOTest {
 
 	@Before
 	public void setUp() {
-		run = new Run();
-		run.setData(new Timestamp(System.currentTimeMillis()));
-		run.setId_run(-1);
-		run.setCycle_id("0");
-		run.setVersion_id("0");
-		run.setProject_id("0");
-		run.setFk_appType(0);
-		run.setFk_repository_servers_id(0);
-		dao = RunJPADAO.getInstance();
+
+		test = new noesis.performancealerts.model.Test();
+		
+		test.setCreated_date(new Timestamp(System.currentTimeMillis()));
+		test.setDescription("TESTE");
+		test.setFk_app_type_id(1);
+		test.setFk_repository_type_id(1);
+		test.setName_test("TESTE");
+		test.setProject_id(String.valueOf(Constants.REPOSITORY_TYPE_TFS));
+		test.setTest_case_id("1");
+		test.setTest_cycle_id("1");
+		test.setTest_version_id("1");
+		test.setUpdated_date(new Timestamp(System.currentTimeMillis()));
+		test.setUsername("TESTER");
+		test.setId(-1);
+		
+		dao = TestJPADAO.getInstance();
 	}
 
 	@After
@@ -46,7 +60,7 @@ public class RunJPADAOTest {
 	@Test
 	public void persist() {
 		try {
-			dao.persist(run);
+			dao.persist(test);
 			assert (true);
 		} catch (Exception e) {
 			assert (false);
@@ -62,11 +76,11 @@ public class RunJPADAOTest {
 			assert (false);
 		}
 	}
-	
+
 	@Test
 	public void merge() {
 		try {
-			dao.merge(run);
+			dao.merge(test);
 			assert (true);
 		} catch (Exception e) {
 			assert (false);
@@ -75,8 +89,7 @@ public class RunJPADAOTest {
 
 	@Test
 	public void find() {
-		Run r = dao.getById(run.getId_run());
+		noesis.performancealerts.model.Test r = dao.getById(test.getId());
 		assertNotEquals(null, r);
 	}
-
 }

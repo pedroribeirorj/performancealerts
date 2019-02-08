@@ -2,8 +2,6 @@ package noesis.performancealerts.daotest;
 
 import static org.junit.Assert.*;
 
-import java.sql.Timestamp;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -11,11 +9,15 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import noesis.performancealerts.dao.RunJPADAO;
+import noesis.performancealerts.dao.RunTestJPADAO;
+import noesis.performancealerts.dao.TestJPADAO;
 import noesis.performancealerts.model.Run;
+import noesis.performancealerts.model.RunTest;
 
-public class RunJPADAOTest {
-	static Run run;
-	static RunJPADAO dao;
+public class RunTestJPADAOTest {
+
+	static RunTest runTest;
+	static RunTestJPADAO dao;
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
@@ -28,15 +30,14 @@ public class RunJPADAOTest {
 
 	@Before
 	public void setUp() {
-		run = new Run();
-		run.setData(new Timestamp(System.currentTimeMillis()));
-		run.setId_run(-1);
-		run.setCycle_id("0");
-		run.setVersion_id("0");
-		run.setProject_id("0");
-		run.setFk_appType(0);
-		run.setFk_repository_servers_id(0);
-		dao = RunJPADAO.getInstance();
+		Run r = RunJPADAO.getInstance().getAnyRun();
+		noesis.performancealerts.model.Test t = (noesis.performancealerts.model.Test) TestJPADAO.getInstance().getAnyTest();
+		runTest = new RunTest();
+		runTest.setId(-1);
+		runTest.setId_run(r.getId_run());
+		runTest.setId_test(t.getId());
+		runTest.setStatus(1);
+		dao = RunTestJPADAO.getInstance();
 	}
 
 	@After
@@ -46,7 +47,7 @@ public class RunJPADAOTest {
 	@Test
 	public void persist() {
 		try {
-			dao.persist(run);
+			dao.persist(runTest);
 			assert (true);
 		} catch (Exception e) {
 			assert (false);
@@ -62,11 +63,11 @@ public class RunJPADAOTest {
 			assert (false);
 		}
 	}
-	
+
 	@Test
 	public void merge() {
 		try {
-			dao.merge(run);
+			dao.merge(runTest);
 			assert (true);
 		} catch (Exception e) {
 			assert (false);
@@ -75,7 +76,7 @@ public class RunJPADAOTest {
 
 	@Test
 	public void find() {
-		Run r = dao.getById(run.getId_run());
+		RunTest r = dao.getById(runTest.getId());
 		assertNotEquals(null, r);
 	}
 

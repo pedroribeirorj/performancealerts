@@ -48,10 +48,10 @@ public class AlertsJPADAO {
 		return entityManager.createQuery("FROM " + Alerts.class.getName()).getResultList();
 	}
 
-	public void persist(Alerts Alerts) {
+	public void persist(Alerts alerts) {
 		try {
 			entityManager.getTransaction().begin();
-			entityManager.persist(Alerts);
+			entityManager.persist(alerts);
 			entityManager.getTransaction().commit();
 		} catch (Exception ex) {
 			ex.printStackTrace();

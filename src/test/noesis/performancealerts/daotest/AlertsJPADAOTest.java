@@ -10,12 +10,14 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import noesis.performancealerts.dao.RunJPADAO;
-import noesis.performancealerts.model.Run;
+import noesis.performancealerts.dao.AlertsJPADAO;
+import noesis.performancealerts.model.Alerts;
+import utils.Constants;
 
-public class RunJPADAOTest {
-	static Run run;
-	static RunJPADAO dao;
+public class AlertsJPADAOTest {
+
+	static Alerts alert;
+	static AlertsJPADAO dao;
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
@@ -28,15 +30,15 @@ public class RunJPADAOTest {
 
 	@Before
 	public void setUp() {
-		run = new Run();
-		run.setData(new Timestamp(System.currentTimeMillis()));
-		run.setId_run(-1);
-		run.setCycle_id("0");
-		run.setVersion_id("0");
-		run.setProject_id("0");
-		run.setFk_appType(0);
-		run.setFk_repository_servers_id(0);
-		dao = RunJPADAO.getInstance();
+		alert = new Alerts();
+		alert.setData(String.valueOf(new Timestamp(System.currentTimeMillis())));
+		alert.setId_run(1);
+		alert.setId_test(1);
+		alert.setSeverity(String.valueOf(Constants.GRAVIDADE_VIOLACAO_CRITICA));
+		alert.setTypeError(String.valueOf(Constants.VIOLACAO_POR_INDISPONIBILIDADE));
+		alert.setValue("0");
+		alert.setId(-1);
+		dao = AlertsJPADAO.getInstance();
 	}
 
 	@After
@@ -46,7 +48,7 @@ public class RunJPADAOTest {
 	@Test
 	public void persist() {
 		try {
-			dao.persist(run);
+			dao.persist(alert);
 			assert (true);
 		} catch (Exception e) {
 			assert (false);
@@ -62,11 +64,11 @@ public class RunJPADAOTest {
 			assert (false);
 		}
 	}
-	
+
 	@Test
 	public void merge() {
 		try {
-			dao.merge(run);
+			dao.merge(alert);
 			assert (true);
 		} catch (Exception e) {
 			assert (false);
@@ -75,7 +77,7 @@ public class RunJPADAOTest {
 
 	@Test
 	public void find() {
-		Run r = dao.getById(run.getId_run());
+		Alerts r = dao.getById(alert.getId());
 		assertNotEquals(null, r);
 	}
 
