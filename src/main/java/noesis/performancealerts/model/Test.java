@@ -23,7 +23,7 @@ public class Test {
 	@Column
 	int fk_repository_type_id	;
 	@Column
-	int fk_repository_servers_id	;
+	String fk_repository_servers_id	;
 	@Column
 	Timestamp created_date	;
 	@Column
@@ -60,10 +60,10 @@ public class Test {
 	public void setFk_repository_type_id(int fk_repository_type_id) {
 		this.fk_repository_type_id = fk_repository_type_id;
 	}
-	public int getFk_repository_servers_id() {
+	public String getFk_repository_servers_id() {
 		return fk_repository_servers_id;
 	}
-	public void setFk_repository_servers_id(int fk_repository_servers_id) {
+	public void setFk_repository_servers_id(String fk_repository_servers_id) {
 		this.fk_repository_servers_id = fk_repository_servers_id;
 	}
 	public Timestamp getCreated_date() {

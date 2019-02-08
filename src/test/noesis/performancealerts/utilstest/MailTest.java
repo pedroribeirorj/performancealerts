@@ -1,3 +1,4 @@
+package noesis.performancealerts.utilstest;
 import static org.junit.Assert.*;
 
 import java.util.Properties;
@@ -13,7 +14,7 @@ import utils.Mail;
 public class MailTest {
 
 	@Test
-	public void enviarEmail() throws Exception {
+	public void enviarEmail() throws Exception {		
 		String corpo = "EMAIL DE TESTE UNITÁRIO";
 		String destinatarios = "pedro.h.silva@noesis.pt";
 		String assunto = "TESTE UNITARIO";

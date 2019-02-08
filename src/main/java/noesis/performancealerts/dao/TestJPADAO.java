@@ -10,8 +10,9 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 
 import noesis.performancealerts.model.CasoDeTeste;
+import noesis.performancealerts.model.Run;
 import noesis.performancealerts.model.Test;
- import noesis.performancealerts.model.Test;
+import noesis.performancealerts.model.Test;
 import utils.Constants;
 
 public class TestJPADAO {
@@ -28,6 +29,18 @@ public class TestJPADAO {
 
 	private TestJPADAO() {
 		entityManager = getEntityManager();
+	}
+
+	public Test getAnyTest() {
+		try {
+			Query q = entityManager.createQuery("FROM Test t");
+			q.setFirstResult(0);
+			List query = q.getResultList();
+			return (Test) query.get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	private EntityManager getEntityManager() {

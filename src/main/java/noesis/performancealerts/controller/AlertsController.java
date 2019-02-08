@@ -18,11 +18,12 @@ import utils.Utils;
 
 public class AlertsController {
 	static Logger logger = LoggerFactory.getLogger(AlertsController.class.getName());
-	
+
 	public static void emitirAlerta(int idSuite, int idCasoDeTeste, Violacao v) throws Exception {
 		Run suite = RunJPADAO.getInstance().getById(idSuite);
 		Test ct = TestJPADAO.getInstance().getById(idCasoDeTeste);
-
+		if (suite == null || ct == null)
+			throw new Exception("[PerformanceAlert] Suíte ou caso de teste não encontrados.");
 		AlertsController alerts = new AlertsController();
 
 		String canal = suite.getCycle_id();
@@ -30,13 +31,16 @@ public class AlertsController {
 
 		String texto = alerts.montaCorpoEmail(v, canal, casoDeTeste);
 		Alerts alerta = new Alerts(v.getValue(), String.valueOf(idSuite), String.valueOf(ct.getId()),
-				String.valueOf(suite.getData()), String.valueOf(v.getTipoViolacao()), String.valueOf(v.getGravidadeViolacao()));
+				String.valueOf(suite.getData()), String.valueOf(v.getTipoViolacao()),
+				String.valueOf(v.getGravidadeViolacao()));
 
 		alerts.enviarEmail(texto, v.gravidadeCritica());
 		atualizarStatusAlerta(alerta);
 	}
 
 	private static void atualizarStatusAlerta(Alerts alerta) {
+		if (Constants.TST_MODE)
+			return;
 		AlertsJPADAO.getInstance().persist(alerta);
 		logger.error("[PerformanceAlerts] Emissão de alerta persistido na base de dados.");
 	}
@@ -54,7 +58,9 @@ public class AlertsController {
 		return texto;
 	}
 
-	private void enviarEmail(String texto, boolean gravidadeCritica) throws Exception {
+	public void enviarEmail(String texto, boolean gravidadeCritica) throws Exception {
+		if (texto.isEmpty())
+			throw new Exception("[PerformanceAlerts] Texto do email precisa ser preenchido.");
 		if (gravidadeCritica) {
 			enviarEmailGerencia(texto);
 		} else {
@@ -63,11 +69,16 @@ public class AlertsController {
 	}
 
 	private void enviarEmailOperacao(String texto) throws Exception {
-		Mail.enviarEmail(texto, Constants.emailsOperacao, "[MONITORIA-TIM] Erro de Performance", Constants.MAIL_PRD_MODE);
+		if (Constants.TST_MODE)
+			return;
+		Mail.enviarEmail(texto, Constants.emailsOperacao, "[MONITORIA-TIM] Erro de Performance",
+				Constants.MAIL_PRD_MODE);
 		logger.error("[PerformanceAlerts] E-mail enviado para equipe operacional.");
 	}
 
 	private void enviarEmailGerencia(String texto) throws Exception {
+		if (Constants.TST_MODE)
+			return;
 		Mail.enviarEmail(texto, Constants.emailsOperacao + "," + Constants.emailsGerencia,
 				"[MONITORIA-TIM] Erro de Performance", Constants.MAIL_PRD_MODE);
 		logger.error("[PerformanceAlerts] E-mail enviado para equipe operacional e gerencial.");

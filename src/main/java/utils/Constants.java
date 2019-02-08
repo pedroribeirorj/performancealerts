@@ -1,6 +1,8 @@
 package utils;
 
 public class Constants {
+	//evitar envio de emails ou persistências desnecessárias
+	public static final boolean TST_MODE = true;
 
 	public static final String RECUPERA_JORNADAS_POR_SUITES = 
 			"select r,rt,t " + "from Run r, RunTest rt, Test t "

@@ -1,4 +1,4 @@
-package noesis.performancealerts.controller;
+package noesis.performancealerts.controllertest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import noesis.performancealerts.controller.PerformanceAlert;
 import noesis.performancealerts.model.Run;
 import static org.mockito.Mockito.*;
 

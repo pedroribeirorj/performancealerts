@@ -50,6 +50,18 @@ public class RunJPADAO {
 		return entityManager.find(Run.class, id);
 	}
 
+	public Run getAnyRun() {
+		try {
+			Query q = entityManager.createQuery("FROM Run r");
+			q.setFirstResult(0);
+			List query = q.getResultList();
+			return (Run) query.get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<Run> findAll() {
 		return entityManager.createQuery("FROM " + Run.class.getName()).getResultList();
@@ -115,8 +127,8 @@ public class RunJPADAO {
 
 		Query q = entityManager
 				.createQuery(Constants.RECUPERA_JORNADAS_POR_SUITES + " limit " + Constants.VOLUME_AMOSTRAL);
-		q.setParameter(1  ,suiteId);
-		q.setParameter( 2, idCasoDeTeste);
+		q.setParameter(1, suiteId);
+		q.setParameter(2, idCasoDeTeste);
 		List query = q.getResultList();
 
 		List<CasoDeTeste> casoDeTestes = new ArrayList<CasoDeTeste>();

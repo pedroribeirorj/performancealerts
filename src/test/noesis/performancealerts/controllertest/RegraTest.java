@@ -1,4 +1,4 @@
-package noesis.performancealerts.controller;
+package noesis.performancealerts.controllertest;
 
 import static org.junit.Assert.*;
 

@@ -69,6 +69,8 @@ public class Mail {
 		try {
 			Message message = montarMensagem(session, remetente, destinatarios, assunto, corpo);
 			/** Método para enviar a mensagem criada */
+			if (Constants.TST_MODE)
+				return true;
 			Transport.send(message);
 			return true;
 		} catch (AuthenticationFailedException e) {
