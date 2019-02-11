@@ -19,7 +19,7 @@ import utils.Mail;
 public class AlertsController {
 	static Logger logger = LoggerFactory.getLogger(AlertsController.class.getName());
 
-	public static void emitirAlerta(int idSuite, int idCasoDeTeste, Violacao v) throws Exception  {
+	public static void emitirAlerta(int idSuite, int idCasoDeTeste, Violacao v) throws MessagingException    {
 		Run suite = RunJPADAO.getInstance().getById(idSuite);
 		Test ct = TestJPADAO.getInstance().getById(idCasoDeTeste);
 		if (suite == null || ct == null)
@@ -59,7 +59,7 @@ public class AlertsController {
 		return texto;
 	}
 
-	public void enviarEmail(String texto, boolean gravidadeCritica) throws Exception {
+	public void enviarEmail(String texto, boolean gravidadeCritica) throws MessagingException {
 		if (texto.isEmpty())
 			throw new IllegalArgumentException("[PerformanceAlerts] Texto do email precisa ser preenchido.");
 		if (gravidadeCritica) {

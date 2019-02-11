@@ -8,9 +8,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 
-import com.google.gson.Gson;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import noesis.performancealerts.model.CasoDeTeste;
 import noesis.performancealerts.model.Run;
@@ -22,7 +22,8 @@ public class RunJPADAO {
 
 	private static RunJPADAO instance;
 	protected EntityManager entityManager;
-
+	static Logger logger = LoggerFactory.getLogger(RunJPADAO.class.getName());
+	
 	public static RunJPADAO getInstance() {
 		if (instance == null) {
 			instance = new RunJPADAO();
@@ -55,7 +56,7 @@ public class RunJPADAO {
 			List query = q.getResultList();
 			return (Run) query.get(0);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 			return null;
 		}
 	}
@@ -65,44 +66,44 @@ public class RunJPADAO {
 		return entityManager.createQuery("FROM " + Run.class.getName()).getResultList();
 	}
 
-	public void persist(Run Run) {
+	public void persist(Run run) {
 		try {
 			entityManager.getTransaction().begin();
-			entityManager.persist(Run);
+			entityManager.persist(run);
 			entityManager.getTransaction().commit();
 		} catch (Exception ex) {
 			try {
 				if (!Constants.TST_MODE)
-					ex.printStackTrace();
+					logger.error(ex.getMessage());
 				entityManager.getTransaction().rollback();
 			} catch (Exception e) {
-				remove(Run);
+				remove(run);
 			}
 		}
 	}
 
-	public void merge(Run Run) {
+	public void merge(Run run) {
 		try {
 			entityManager.getTransaction().begin();
-			entityManager.merge(Run);
+			entityManager.merge(run);
 			entityManager.getTransaction().commit();
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage());
 			entityManager.getTransaction().rollback();
 		}
 	}
 
-	public void remove(Run Run) {
+	public void remove(Run run) {
 		try {
-			if (Run == null)
+			if (run == null)
 				return;
 			entityManager.getTransaction().begin();
-			Run = entityManager.find(Run.class, Run.getIdRun());
-			entityManager.remove(Run);
+			run = entityManager.find(Run.class, run.getIdRun());
+			entityManager.remove(run);
 			entityManager.getTransaction().commit();
 		} catch (Exception ex) {
 			if (!(Constants.TST_MODE && ex.getClass() == javax.persistence.RollbackException.class)) {
-				ex.printStackTrace();
+				logger.error(ex.getMessage());
 				entityManager.getTransaction().rollback();
 			}
 		}
@@ -115,10 +116,10 @@ public class RunJPADAO {
 
 	public void removeById(final int id) {
 		try {
-			Run Run = getById(id);
-			remove(Run);
+			Run run = getById(id);
+			remove(run);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage());
 		}
 	}
 

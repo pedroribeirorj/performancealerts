@@ -8,9 +8,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import noesis.performancealerts.dao.AlertsJPADAO;
 import noesis.performancealerts.dao.RunJPADAO;
 import noesis.performancealerts.dao.TestJPADAO;
 import noesis.performancealerts.dao.TestJPADAO;
+import noesis.performancealerts.model.Alerts;
 import noesis.performancealerts.model.Run;
 import utils.Constants;
 
@@ -18,7 +20,7 @@ import static org.mockito.Mockito.*;
 
 import java.sql.Timestamp;
 
-public class TestTest {
+public class TestJPADAOTest {
 
 	static noesis.performancealerts.model.Test test;
 	static TestJPADAO dao;
@@ -36,7 +38,7 @@ public class TestTest {
 	public void setUp() {
 
 		test = new noesis.performancealerts.model.Test();
-		
+
 		test.setCreated_date(new Timestamp(System.currentTimeMillis()));
 		test.setDescription("TESTE");
 		test.setFk_app_type_id(1);
@@ -49,7 +51,7 @@ public class TestTest {
 		test.setUpdated_date(new Timestamp(System.currentTimeMillis()));
 		test.setUsername("TESTER");
 		test.setId(-1);
-		
+
 		dao = TestJPADAO.getInstance();
 	}
 
@@ -91,5 +93,47 @@ public class TestTest {
 	public void find() {
 		noesis.performancealerts.model.Test r = dao.getById(test.getId());
 		assertNotEquals(null, r);
+	}
+
+	@Test
+	public void remove() {
+		test = new noesis.performancealerts.model.Test();
+		test.setCreated_date(new Timestamp(System.currentTimeMillis()));
+		test.setDescription("TESTE");
+		test.setFk_app_type_id(1);
+		test.setFk_repository_type_id(1);
+		test.setName_test("TESTE");
+		test.setProject_id(String.valueOf(Constants.REPOSITORY_TYPE_TFS));
+		test.setTest_case_id("1");
+		test.setTest_cycle_id("1");
+		test.setTest_version_id("1");
+		test.setUpdated_date(new Timestamp(System.currentTimeMillis()));
+		test.setUsername("TESTER");
+		test.setId(-1);
+		dao = TestJPADAO.getInstance();
+		dao.persist(test);
+		dao.remove(test);
+		assert (true);
+	}
+
+	@Test
+	public void removeById() {
+		test = new noesis.performancealerts.model.Test();
+		test.setCreated_date(new Timestamp(System.currentTimeMillis()));
+		test.setDescription("TESTE");
+		test.setFk_app_type_id(1);
+		test.setFk_repository_type_id(1);
+		test.setName_test("TESTE");
+		test.setProject_id(String.valueOf(Constants.REPOSITORY_TYPE_TFS));
+		test.setTest_case_id("1");
+		test.setTest_cycle_id("1");
+		test.setTest_version_id("1");
+		test.setUpdated_date(new Timestamp(System.currentTimeMillis()));
+		test.setUsername("TESTER");
+		test.setId(-1);
+		dao = TestJPADAO.getInstance();
+		dao.persist(test);
+		dao.removeById(test.getId());
+		assert (true);
 	}
 }

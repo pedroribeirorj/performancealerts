@@ -25,8 +25,6 @@ public class AlertsJPADAOTest {
 
 	@AfterClass
 	public static void tearDownClass() throws Exception {
-//		dao.remove(dao.getById(-1));
-//		dao.remove(alert);
 	}
 
 	@Before
@@ -81,5 +79,37 @@ public class AlertsJPADAOTest {
 		} catch (Exception e) {
 			assert (false);
 		}
+	}
+	@Test
+	public void remove() {
+		alert = new Alerts();
+		alert.setData(String.valueOf(new Timestamp(System.currentTimeMillis())));
+		alert.setId(-1);
+		alert.setIdRun(1);
+		alert.setIdTest(1);
+		alert.setSeverity(String.valueOf(Constants.GRAVIDADE_VIOLACAO_CRITICA));
+		alert.setTypeError(String.valueOf(Constants.VIOLACAO_POR_INDISPONIBILIDADE));
+		alert.setValue("0");
+		alert.setId(-1);
+		dao = AlertsJPADAO.getInstance();
+		dao.persist(alert);
+		dao.remove(alert);
+		assert(true);
+	}
+	@Test
+	public void removeById() {
+		alert = new Alerts();
+		alert.setData(String.valueOf(new Timestamp(System.currentTimeMillis())));
+		alert.setId(-1);
+		alert.setIdRun(1);
+		alert.setIdTest(1);
+		alert.setSeverity(String.valueOf(Constants.GRAVIDADE_VIOLACAO_CRITICA));
+		alert.setTypeError(String.valueOf(Constants.VIOLACAO_POR_INDISPONIBILIDADE));
+		alert.setValue("0");
+		alert.setId(-1);
+		dao = AlertsJPADAO.getInstance();
+		dao.persist(alert);
+		dao.removeById(alert.getId());
+		assert(true);
 	}
 }

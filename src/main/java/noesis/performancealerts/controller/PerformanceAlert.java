@@ -2,6 +2,9 @@ package noesis.performancealerts.controller;
 
 import java.util.Iterator;
 import java.util.List;
+
+import javax.mail.MessagingException;
+
 import org.apache.log4j.BasicConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +30,7 @@ public class PerformanceAlert {
 		}
 	}
 
-	public void analisarSuites(List<Run> suites) throws Exception {
+	public void analisarSuites(List<Run> suites) throws MessagingException {
 		if (suites != null && !suites.isEmpty()) {
 			for (Iterator iterator = suites.iterator(); iterator.hasNext();) {
 				Run suite = (Run) iterator.next();
@@ -40,7 +43,7 @@ public class PerformanceAlert {
 		}
 	}
 
-	public void analisarCasosDeTeste(Run suite, List<Integer> testsIds) throws Exception {
+	public void analisarCasosDeTeste(Run suite, List<Integer> testsIds) throws MessagingException  {
 		// para cada teste, analisa violação de regras
 		if (suite != null && testsIds != null && !testsIds.isEmpty())
 			for (Iterator iterator2 = testsIds.iterator(); iterator2.hasNext();) {

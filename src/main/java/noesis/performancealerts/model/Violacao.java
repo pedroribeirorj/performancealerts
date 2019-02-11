@@ -8,12 +8,15 @@ public class Violacao {
 	String value;
 
 	public Violacao(int tipoViolacao, int gravidadeViolacao, String value) {
-		this.tipoViolacao = tipoViolacao;
-		this.gravidadeViolacao = gravidadeViolacao;
+		this.tipoViolacao = ViolacaoTipo.procurarOpcao(tipoViolacao);
+		this.gravidadeViolacao = ViolacaoGravidade.procurarOpcao(gravidadeViolacao);
 		this.value = value;
+		if (this.tipoViolacao == -1 || this.gravidadeViolacao == -1 || value.isEmpty())
+			throw new IllegalArgumentException(
+					"[PerformanceAlerts] Violacao não pode ser criada com parâmetros informados.");
 	}
 
-	public Violacao() {
+	private Violacao() {
 	}
 
 	public String getValue() {

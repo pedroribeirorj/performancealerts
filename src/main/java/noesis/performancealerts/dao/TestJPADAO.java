@@ -1,7 +1,5 @@
 package noesis.performancealerts.dao;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -9,15 +7,15 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
-import noesis.performancealerts.model.CasoDeTeste;
-import noesis.performancealerts.model.Run;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import noesis.performancealerts.model.Test;
-import noesis.performancealerts.model.Test;
-import utils.Constants;
 
 public class TestJPADAO {
 	private static TestJPADAO instance;
 	protected EntityManager entityManager;
+	static Logger logger = LoggerFactory.getLogger(TestJPADAO.class.getName());
 
 	public static TestJPADAO getInstance() {
 		if (instance == null) {
@@ -38,7 +36,7 @@ public class TestJPADAO {
 			List query = q.getResultList();
 			return (Test) query.get(0);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 			return null;
 		}
 	}
@@ -61,46 +59,46 @@ public class TestJPADAO {
 		return entityManager.createQuery("FROM " + Test.class.getName()).getResultList();
 	}
 
-	public void persist(Test Test) {
+	public void persist(Test test) {
 		try {
 			entityManager.getTransaction().begin();
-			entityManager.persist(Test);
+			entityManager.persist(test);
 			entityManager.getTransaction().commit();
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage());
 			entityManager.getTransaction().rollback();
 		}
 	}
 
-	public void merge(Test Test) {
+	public void merge(Test test) {
 		try {
 			entityManager.getTransaction().begin();
-			entityManager.merge(Test);
+			entityManager.merge(test);
 			entityManager.getTransaction().commit();
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage());
 			entityManager.getTransaction().rollback();
 		}
 	}
 
-	public void remove(Test Test) {
+	public void remove(Test test) {
 		try {
 			entityManager.getTransaction().begin();
-			Test = entityManager.find(Test.class, Test.getId());
-			entityManager.remove(Test);
+			test = entityManager.find(Test.class, test.getId());
+			entityManager.remove(test);
 			entityManager.getTransaction().commit();
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage());
 			entityManager.getTransaction().rollback();
 		}
 	}
 
 	public void removeById(final int id) {
 		try {
-			Test Test = getById(id);
-			remove(Test);
+			Test test = getById(id);
+			remove(test);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage());
 		}
 	}
 

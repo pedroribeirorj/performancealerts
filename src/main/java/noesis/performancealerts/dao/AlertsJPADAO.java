@@ -1,22 +1,21 @@
 package noesis.performancealerts.dao;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.Query;
 
-import noesis.performancealerts.model.CasoDeTeste;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import noesis.performancealerts.model.Alerts;
-import noesis.performancealerts.model.Test;
 import utils.Constants;
 
 public class AlertsJPADAO {
 	private static AlertsJPADAO instance;
 	protected EntityManager entityManager;
+	static Logger logger = LoggerFactory.getLogger(AlertsJPADAO.class.getName());
 
 	public static AlertsJPADAO getInstance() {
 		if (instance == null) {
@@ -56,7 +55,7 @@ public class AlertsJPADAO {
 		} catch (Exception ex) {
 			try {
 				if (!Constants.TST_MODE)
-					ex.printStackTrace();
+					logger.error(ex.getMessage());
 				entityManager.getTransaction().rollback();
 			} catch (Exception e) {
 				remove(alerts);
@@ -64,38 +63,38 @@ public class AlertsJPADAO {
 		}
 	}
 
-	public void merge(Alerts Alerts, boolean debug) {
+	public void merge(Alerts alerts, boolean debug) {
 		try {
 			entityManager.getTransaction().begin();
-			entityManager.merge(Alerts);
+			entityManager.merge(alerts);
 			if (!debug)
 				entityManager.getTransaction().commit();
 			else
 				entityManager.getTransaction().rollback();
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage());
 			entityManager.getTransaction().rollback();
 		}
 	}
 
-	public void remove(Alerts Alerts) {
+	public void remove(Alerts alerts) {
 		try {
 			entityManager.getTransaction().begin();
-			Alerts = entityManager.find(Alerts.class, Alerts.getId());
-			entityManager.remove(Alerts);
+			alerts = entityManager.find(Alerts.class, alerts.getId());
+			entityManager.remove(alerts);
 			entityManager.getTransaction().commit();
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage());
 			entityManager.getTransaction().rollback();
 		}
 	}
 
 	public void removeById(final int id) {
 		try {
-			Alerts Alerts = getById(id);
-			remove(Alerts);
+			Alerts alerts = getById(id);
+			remove(alerts);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage());
 		}
 	}
 }

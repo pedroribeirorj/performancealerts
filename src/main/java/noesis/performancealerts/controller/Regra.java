@@ -77,18 +77,18 @@ public class Regra {
 
 	public Violacao analisaDisponibilidade(List<CasoDeTeste> j) {
 		double disponibilidade = getDisponibilidade(j);
-		Violacao v = new Violacao();
+		int tipoViolacao = -1;
+		int gravidadeViolacao = -1;
 		if (disponibilidadeOK(disponibilidade)) {
 			return null;
 		}
-		v.setTipoViolacao(Constants.VIOLACAO_POR_INDISPONIBILIDADE);
+		tipoViolacao = Constants.VIOLACAO_POR_INDISPONIBILIDADE;
 		if (disponibilidadeCritica(disponibilidade)) {
-			v.setGravidadeViolacao(Constants.GRAVIDADE_VIOLACAO_CRITICA);
+			gravidadeViolacao = Constants.GRAVIDADE_VIOLACAO_CRITICA;
 		} else {
-			v.setGravidadeViolacao(Constants.GRAVIDADE_VIOLACAO_NAO_CRITICA);
+			gravidadeViolacao = Constants.GRAVIDADE_VIOLACAO_NAO_CRITICA;
 		}
-		v.setValue(String.valueOf(disponibilidade));
-		return v;
+		return new Violacao(tipoViolacao, gravidadeViolacao, String.valueOf(disponibilidade));
 	}
 
 	public boolean rangeDisponibilidadeLatencia(double valor) {
