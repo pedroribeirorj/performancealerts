@@ -14,7 +14,6 @@ public class Violacao {
 	}
 
 	public Violacao() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public String getValue() {

@@ -1,27 +1,25 @@
 package noesis.performancealerts.model;
 
-import noesis.performancealerts.dao.RunJPADAO;
-import noesis.performancealerts.dao.TestJPADAO;
-import utils.Constants;
-import utils.Mail;
-import utils.Utils;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Table;
 import javax.persistence.Column;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.SequenceGenerator;
 
 @Entity
 @Table(name = "tbl_alerts")
 public class Alerts {
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "id_test")
+    @Column(name = "id", unique = true, nullable = false)
+    @SequenceGenerator(name = "id_test", sequenceName = "seq_tbl_alerts", allocationSize = 1)
 	int id;
-	@Column
-	int id_test;
-	@Column
-	int id_run;
+	@Column(name="id_test")
+	int idTest;
+	@Column(name="id_run")
+	int idRun;
 	@Column
 	String data;
 	@Column
@@ -32,12 +30,12 @@ public class Alerts {
 	String value;
 
 	public Alerts() {
-		// TODO Auto-generated constructor stub
+		// Classe de modelo da tabela alertas (tbl_alerts).
 	}
 
-	public Alerts(String value, int id_run, int id_test, String data, String typeError, String severity) {
-		this.id_test = id_test;
-		this.id_run = id_run;
+	public Alerts(String value, int idRun, int idTest, String data, String typeError, String severity) {
+		this.idTest = idTest;
+		this.idRun = idRun;
 		this.data = data;
 		this.typeError = typeError;
 		this.severity = severity;
@@ -52,20 +50,20 @@ public class Alerts {
 		this.id = id;
 	}
 
-	public int getId_test() {
-		return id_test;
+	public int getIdTest() {
+		return idTest;
 	}
 
-	public void setId_test(int id_test) {
-		this.id_test = id_test;
+	public void setIdTest(int idTest) {
+		this.idTest = idTest;
 	}
 
-	public int getId_run() {
-		return id_run;
+	public int getIdRun() {
+		return idRun;
 	}
 
-	public void setId_run(int id_run) {
-		this.id_run = id_run;
+	public void setIdRun(int idRun) {
+		this.idRun = idRun;
 	}
 
 	public String getData() {

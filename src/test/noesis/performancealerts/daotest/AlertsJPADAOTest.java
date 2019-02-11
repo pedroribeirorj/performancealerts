@@ -25,15 +25,17 @@ public class AlertsJPADAOTest {
 
 	@AfterClass
 	public static void tearDownClass() throws Exception {
-		dao.remove(dao.getById(-1));
+//		dao.remove(dao.getById(-1));
+//		dao.remove(alert);
 	}
 
 	@Before
 	public void setUp() {
 		alert = new Alerts();
 		alert.setData(String.valueOf(new Timestamp(System.currentTimeMillis())));
-		alert.setId_run(1);
-		alert.setId_test(1);
+		alert.setId(-1);
+		alert.setIdRun(1);
+		alert.setIdTest(1);
 		alert.setSeverity(String.valueOf(Constants.GRAVIDADE_VIOLACAO_CRITICA));
 		alert.setTypeError(String.valueOf(Constants.VIOLACAO_POR_INDISPONIBILIDADE));
 		alert.setValue("0");
@@ -56,6 +58,12 @@ public class AlertsJPADAOTest {
 	}
 
 	@Test
+	public void find() {
+		Alerts r = dao.getById(1);
+		assertNotEquals(null, r);
+	}
+
+	@Test
 	public void findAll() {
 		try {
 			dao.findAll();
@@ -68,17 +76,10 @@ public class AlertsJPADAOTest {
 	@Test
 	public void merge() {
 		try {
-			dao.merge(alert);
+			dao.merge(alert, true);
 			assert (true);
 		} catch (Exception e) {
 			assert (false);
 		}
 	}
-
-	@Test
-	public void find() {
-		Alerts r = dao.getById(alert.getId());
-		assertNotEquals(null, r);
-	}
-
 }

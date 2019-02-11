@@ -54,16 +54,24 @@ public class AlertsJPADAO {
 			entityManager.persist(alerts);
 			entityManager.getTransaction().commit();
 		} catch (Exception ex) {
-			ex.printStackTrace();
-			entityManager.getTransaction().rollback();
+			try {
+				if (!Constants.TST_MODE)
+					ex.printStackTrace();
+				entityManager.getTransaction().rollback();
+			} catch (Exception e) {
+				remove(alerts);
+			}
 		}
 	}
 
-	public void merge(Alerts Alerts) {
+	public void merge(Alerts Alerts, boolean debug) {
 		try {
 			entityManager.getTransaction().begin();
 			entityManager.merge(Alerts);
-			entityManager.getTransaction().commit();
+			if (!debug)
+				entityManager.getTransaction().commit();
+			else
+				entityManager.getTransaction().rollback();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			entityManager.getTransaction().rollback();

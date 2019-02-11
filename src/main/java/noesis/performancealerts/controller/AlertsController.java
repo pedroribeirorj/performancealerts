@@ -1,6 +1,7 @@
 package noesis.performancealerts.controller;
 
-import java.util.GregorianCalendar;
+import javax.mail.MessagingException;
+import javax.persistence.NoResultException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,33 +15,33 @@ import noesis.performancealerts.model.Test;
 import noesis.performancealerts.model.Violacao;
 import utils.Constants;
 import utils.Mail;
-import utils.Utils;
 
 public class AlertsController {
 	static Logger logger = LoggerFactory.getLogger(AlertsController.class.getName());
 
-	public static void emitirAlerta(int idSuite, int idCasoDeTeste, Violacao v) throws Exception {
+	public static void emitirAlerta(int idSuite, int idCasoDeTeste, Violacao v) throws Exception  {
 		Run suite = RunJPADAO.getInstance().getById(idSuite);
 		Test ct = TestJPADAO.getInstance().getById(idCasoDeTeste);
 		if (suite == null || ct == null)
-			throw new Exception("[PerformanceAlert] Suíte ou caso de teste não encontrados.");
+			throw new NoResultException("[PerformanceAlert] Suíte ou caso de teste não encontrados.");
 		AlertsController alerts = new AlertsController();
 
-		String canal = suite.getCycle_id();
+		String canal = suite.getCycleId();
 		String casoDeTeste = ct.getName_test();
 
 		String texto = alerts.montaCorpoEmail(v, canal, casoDeTeste);
-		Alerts alerta = new Alerts(v.getValue(), idSuite,ct.getId(),
-				String.valueOf(suite.getData()), String.valueOf(v.getTipoViolacao()),
-				String.valueOf(v.getGravidadeViolacao()));
+		Alerts alerta = new Alerts(v.getValue(), idSuite, ct.getId(), String.valueOf(suite.getData()),
+				String.valueOf(v.getTipoViolacao()), String.valueOf(v.getGravidadeViolacao()));
 
 		alerts.enviarEmail(texto, v.gravidadeCritica());
 		atualizarStatusAlerta(alerta);
 	}
 
 	private static void atualizarStatusAlerta(Alerts alerta) {
-		if (Constants.TST_MODE)
+		if (Constants.TST_MODE) {
+			logger.warn("[PerformanceAlerts] Alerta não persistido por estar em modo debug.");
 			return;
+		}
 		AlertsJPADAO.getInstance().persist(alerta);
 		logger.error("[PerformanceAlerts] Emissão de alerta persistido na base de dados.");
 	}
@@ -60,7 +61,7 @@ public class AlertsController {
 
 	public void enviarEmail(String texto, boolean gravidadeCritica) throws Exception {
 		if (texto.isEmpty())
-			throw new Exception("[PerformanceAlerts] Texto do email precisa ser preenchido.");
+			throw new IllegalArgumentException("[PerformanceAlerts] Texto do email precisa ser preenchido.");
 		if (gravidadeCritica) {
 			enviarEmailGerencia(texto);
 		} else {
@@ -68,17 +69,22 @@ public class AlertsController {
 		}
 	}
 
-	private void enviarEmailOperacao(String texto) throws Exception {
-		if (Constants.TST_MODE)
+	private void enviarEmailOperacao(String texto) throws MessagingException  {
+		if (Constants.TST_MODE) {
+			logger.warn("[PerformanceAlerts] E-mail não enviado por estar em modo debug.");
 			return;
+		}
+
 		Mail.enviarEmail(texto, Constants.EMAILS_OPERACAO, "[MONITORIA-TIM] Erro de Performance",
 				Constants.MAIL_PRD_MODE);
 		logger.error("[PerformanceAlerts] E-mail enviado para equipe operacional.");
 	}
 
-	private void enviarEmailGerencia(String texto) throws Exception {
-		if (Constants.TST_MODE)
+	private void enviarEmailGerencia(String texto) throws MessagingException  {
+		if (Constants.TST_MODE) {
+			logger.warn("[PerformanceAlerts] E-mail não enviado por estar em modo debug.");
 			return;
+		}
 		Mail.enviarEmail(texto, Constants.EMAILS_OPERACAO + "," + Constants.EMAILS_GERENCIA,
 				"[MONITORIA-TIM] Erro de Performance", Constants.MAIL_PRD_MODE);
 		logger.error("[PerformanceAlerts] E-mail enviado para equipe operacional e gerencial.");

@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import noesis.performancealerts.controller.PerformanceAlert;
+import noesis.performancealerts.dao.RunJPADAO;
 import noesis.performancealerts.model.Run;
 import static org.mockito.Mockito.*;
 
@@ -48,7 +49,7 @@ public class PerformanceAlertTest {
 	@Test
 	public void analisarSuites_ComJornadas() {
 		try {
-			Run r = mock(Run.class);
+			Run r = RunJPADAO.getInstance().getAnyRun();
 			List<Run> suites = new ArrayList<Run>();
 			suites.add(r);
 			performanceAlert.analisarSuites(suites);
@@ -74,7 +75,7 @@ public class PerformanceAlertTest {
 	public void analisarCasosDeTeste_jornadaSemViolacao() {
 		try {
 			Run suite = mock(Run.class);
-			suite.setCycle_id("7");
+			suite.setCycleId("7");
 			List<Integer> idsTest = new ArrayList<Integer>();
 			idsTest.add(7);
 			performanceAlert.analisarCasosDeTeste(suite, idsTest);
@@ -88,7 +89,7 @@ public class PerformanceAlertTest {
 	public void analisarCasosDeTeste_jornadaComViolacao() {
 		try {
 			Run suite = mock(Run.class);
-			suite.setCycle_id("7");
+			suite.setCycleId("7");
 			List<Integer> idsTest = new ArrayList<Integer>();
 			idsTest.add(661);
 			performanceAlert.analisarCasosDeTeste(suite, idsTest);

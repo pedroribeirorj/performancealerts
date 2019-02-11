@@ -1,20 +1,21 @@
 package utils;
 
+import noesis.performancealerts.model.RunTest;
+
 public class Constants {
 	private Constants() {
-		
 	}
 	//evitar envio de emails ou persistências desnecessárias
 	public static final boolean TST_MODE = true;
 
 	public static final String RECUPERA_JORNADAS_POR_SUITES = 
 			"select r,rt,t " + "from Run r, RunTest rt, Test t "
-					+ " where rt.id_run = r.id_run " 
-					+ " and rt.id_test = t.id "
-					+ " and t.test_cycle_id = ?1"
+					+ " where rt.idRun = r.idRun " 
+					+ " and rt.idTest = t.id "
+					+ " and t.testCycleId = ?1"
 					+ " and t.id = ?2 "
-					+ " and (t.id ,r.id_run, r.data) not in (select a.id_test ,    a.id_run , a.data from Alerts a)" 
-					+ " order by t.test_cycle_id, "
+					+ " and (t.id ,r.idRun, r.data) not in (select a.idTest ,    a.idRun , a.data from Alerts a)" 
+					+ " order by t.testCycleId, "
 					+ "r.data desc " ;
 	
 	// limites
@@ -51,4 +52,6 @@ public class Constants {
 	public static final int REPOSITORY_TYPE_ZEPHYR = 1;
 	public static final int REPOSITORY_TYPE_TFS = 2;
 	public static final int REPOSITORY_TYPE_XRAY = 3;
+	
+	public static final String QUERY_FIND_TESTS_BY_RUN_ID = "select distinct idTest FROM " + RunTest.class.getName() + " where idRun = :idRun";
 }

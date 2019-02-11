@@ -1,6 +1,5 @@
 package noesis.performancealerts.controller;
 
-import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.List;
 
@@ -16,14 +15,14 @@ import noesis.performancealerts.model.Violacao;
 public class Regra {
 	static Logger logger = LoggerFactory.getLogger(Regra.class.getName());
 
-	public static Violacao analisaConformidade(String idSuite, int idCasoDeTeste) throws Exception {
+	public static Violacao analisaConformidade(String idSuite, int idCasoDeTeste) {
 
 		// analisa se há inconformidade para um caso de teste de uma suíte considerando
 
 		// um volume amostral e regras de negócio
 		Regra r = new Regra();
 		List<CasoDeTeste> casoDeTeste = RunJPADAO.getInstance().recuperaCasosDeTestePorSuite(idSuite, idCasoDeTeste);
-		if (casoDeTeste.size() == 0)
+		if (casoDeTeste.isEmpty())
 			return null;
 
 		// valida existencia de sequencia de erros além do permitido
@@ -59,8 +58,6 @@ public class Regra {
 	}
 
 	public double getDisponibilidade(List<CasoDeTeste> j) {
-		double disponibilidade = 0.0;
-
 		int contadorPassed = 0;
 		int totalCasos = j.size();
 		if (totalCasos == 0)
@@ -72,13 +69,13 @@ public class Regra {
 				contadorPassed++;
 			}
 		}
-		disponibilidade = (contadorPassed / totalCasos) * 100;
+		double disponibilidade = ((double) contadorPassed / totalCasos * 100);
 		disponibilidade = Utils.doubleComDuasCasasDecimais(disponibilidade);
 		return disponibilidade;
 
 	}
 
-	public Violacao analisaDisponibilidade(List<CasoDeTeste> j) throws Exception {
+	public Violacao analisaDisponibilidade(List<CasoDeTeste> j) {
 		double disponibilidade = getDisponibilidade(j);
 		Violacao v = new Violacao();
 		if (disponibilidadeOK(disponibilidade)) {
@@ -94,28 +91,28 @@ public class Regra {
 		return v;
 	}
 
-	public boolean rangeDisponibilidadeLatencia(double valor) throws Exception {
+	public boolean rangeDisponibilidadeLatencia(double valor) {
 		if (valor >= 0 && valor <= 100)
 			return true;
 		else
-			throw new Exception("Valor deve corresponder ao intervalo [0,100].");
+			throw new IllegalArgumentException("Valor deve corresponder ao intervalo [0,100].");
 	}
 
-	public boolean disponibilidadeOK(double disponibilidade) throws Exception {
+	public boolean disponibilidadeOK(double disponibilidade) {
 		return rangeDisponibilidadeLatencia(disponibilidade) && disponibilidade >= Constants.THRESHOLD_DISPONIBILIDADE;
 	}
 
-	public boolean disponibilidadeCritica(double disponibilidade) throws Exception {
+	public boolean disponibilidadeCritica(double disponibilidade) {
 		return rangeDisponibilidadeLatencia(disponibilidade)
 				&& disponibilidade < Constants.THRESHOLD_DISPONIBILIDADE_MINIMA;
 
 	}
 
-	public boolean latenciaOK(double latencia) throws Exception {
+	public boolean latenciaOK(double latencia) {
 		return rangeDisponibilidadeLatencia(latencia) && latencia >= Constants.THRESHOLD_LATENCIA;
 	}
 
-	public boolean latenciaCritica(double latencia) throws Exception {
+	public boolean latenciaCritica(double latencia) {
 		return rangeDisponibilidadeLatencia(latencia) && latencia < Constants.THRESHOLD_LATENCIA_MINIMA;
 	}
 }

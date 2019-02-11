@@ -30,12 +30,12 @@ public class RunJPADAOTest {
 	public void setUp() {
 		run = new Run();
 		run.setData(new Timestamp(System.currentTimeMillis()));
-		run.setId_run(-1);
-		run.setCycle_id("0");
-		run.setVersion_id("0");
-		run.setProject_id("0");
-		run.setFk_appType(0);
-		run.setFk_repository_servers_id(0);
+		run.setIdRun(-1);
+		run.setCycleId("0");
+		run.setVersionId("0");
+		run.setProjectId("0");
+		run.setFkAappType(0);
+		run.setFkRepositoryServersId(0);
 		dao = RunJPADAO.getInstance();
 	}
 
@@ -62,7 +62,7 @@ public class RunJPADAOTest {
 			assert (false);
 		}
 	}
-	
+
 	@Test
 	public void merge() {
 		try {
@@ -75,7 +75,7 @@ public class RunJPADAOTest {
 
 	@Test
 	public void find() {
-		Run r = dao.getById(run.getId_run());
+		Run r = dao.getAnyRun();
 		assertNotEquals(null, r);
 	}
 

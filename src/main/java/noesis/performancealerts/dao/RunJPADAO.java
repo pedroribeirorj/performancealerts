@@ -71,8 +71,13 @@ public class RunJPADAO {
 			entityManager.persist(Run);
 			entityManager.getTransaction().commit();
 		} catch (Exception ex) {
-			ex.printStackTrace();
-			entityManager.getTransaction().rollback();
+			try {
+				if (!Constants.TST_MODE)
+					ex.printStackTrace();
+				entityManager.getTransaction().rollback();
+			} catch (Exception e) {
+				remove(Run);
+			}
 		}
 	}
 
@@ -92,12 +97,14 @@ public class RunJPADAO {
 			if (Run == null)
 				return;
 			entityManager.getTransaction().begin();
-			Run = entityManager.find(Run.class, Run.getId_run());
+			Run = entityManager.find(Run.class, Run.getIdRun());
 			entityManager.remove(Run);
 			entityManager.getTransaction().commit();
 		} catch (Exception ex) {
-			ex.printStackTrace();
-			entityManager.getTransaction().rollback();
+			if (!(Constants.TST_MODE && ex.getClass() == javax.persistence.RollbackException.class)) {
+				ex.printStackTrace();
+				entityManager.getTransaction().rollback();
+			}
 		}
 	}
 

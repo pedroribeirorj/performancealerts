@@ -2,18 +2,13 @@ package noesis.performancealerts.controller;
 
 import java.util.Iterator;
 import java.util.List;
-
 import org.apache.log4j.BasicConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import noesis.performancealerts.dao.RunJPADAO;
 import noesis.performancealerts.dao.RunTestJPADAO;
-import noesis.performancealerts.model.Alerts;
 import noesis.performancealerts.model.Run;
-import noesis.performancealerts.model.RunTest;
 import noesis.performancealerts.model.Violacao;
-import utils.Constants;
 
 public class PerformanceAlert {
 	static Logger logger = LoggerFactory.getLogger(PerformanceAlert.class.getName());
@@ -28,7 +23,7 @@ public class PerformanceAlert {
 			pa.analisarSuites(suites);
 			logger.info("[PerformanceAlerts] Fim da análise de envio de alertas.");
 		} catch (Exception e) {
-			logger.error("[PerformanceAlerts] Erro no módulo de alertas: ", e.getMessage());
+			logger.error("[PerformanceAlerts] Erro no módulo de alertas: %s", e.getMessage());
 		}
 	}
 
@@ -38,8 +33,8 @@ public class PerformanceAlert {
 				Run suite = (Run) iterator.next();
 				// identificando os testes de uma suíte
 				logger.info("--------------------------------------------------------------------------");
-				logger.info("[PerformanceAlerts] Identificando casos de teste da suite " + suite.getId_run() + ".");
-				List<Integer> testsIds = RunTestJPADAO.getInstance().findTestsByRunID(suite.getId_run());
+				logger.info("[PerformanceAlerts] Identificando casos de teste da suite " + suite.getIdRun() + ".");
+				List<Integer> testsIds = RunTestJPADAO.getInstance().findTestsByRunID(suite.getIdRun());
 				analisarCasosDeTeste(suite, testsIds);
 			}
 		}
@@ -47,21 +42,22 @@ public class PerformanceAlert {
 
 	public void analisarCasosDeTeste(Run suite, List<Integer> testsIds) throws Exception {
 		// para cada teste, analisa violação de regras
-		if(suite != null && testsIds != null && !testsIds.isEmpty())
-		for (Iterator iterator2 = testsIds.iterator(); iterator2.hasNext();) {
-			int testId = (Integer) iterator2.next();
-			logger.info("[PerformanceAlerts] Validando regras de envio de alertas.");
-			Violacao v = Regra.analisaConformidade(suite.getCycle_id(), testId);
-			if (v != null && v.existeViolacao()) {
-				logger.info("[PerformanceAlerts] Emitindo alerta para caso de teste " + testId + ".");
-				AlertsController.emitirAlerta(suite.getId_run(), testId, v);
-			} else
-				logger.info("[PerformanceAlerts] Caso de teste " + testId + " da suite " + suite.getCycle_id()
-						+ " não apresenta violações de regras.");
-		}
+		if (suite != null && testsIds != null && !testsIds.isEmpty())
+			for (Iterator iterator2 = testsIds.iterator(); iterator2.hasNext();) {
+				int testId = (Integer) iterator2.next();
+				logger.info("[PerformanceAlerts] Validando regras de envio de alertas.");
+				Violacao v = Regra.analisaConformidade(suite.getCycleId(), testId);
+				if (v != null && v.existeViolacao()) {
+					logger.info("[PerformanceAlerts] Emitindo alerta para caso de teste %s.", testId);
+					AlertsController.emitirAlerta(suite.getIdRun(), testId, v);
+				} else {
+					logger.info("[PerformanceAlerts] Caso de teste %s da suite %s não apresenta violações de regras.",
+							testId, suite.getCycleId());
+				}
+			}
 	}
 
 	public static void main(String[] args) {
-		PerformanceAlert.main(null);
+		PerformanceAlert.run();
 	}
 }

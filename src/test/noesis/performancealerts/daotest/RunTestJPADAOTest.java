@@ -34,8 +34,8 @@ public class RunTestJPADAOTest {
 		noesis.performancealerts.model.Test t = (noesis.performancealerts.model.Test) TestJPADAO.getInstance().getAnyTest();
 		runTest = new RunTest();
 		runTest.setId(-1);
-		runTest.setId_run(r.getId_run());
-		runTest.setId_test(t.getId());
+		runTest.setIdRun(r.getIdRun());
+		runTest.setIdTest(t.getId());
 		runTest.setStatus(1);
 		dao = RunTestJPADAO.getInstance();
 	}

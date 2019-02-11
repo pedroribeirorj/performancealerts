@@ -46,8 +46,8 @@ public class RunTestJPADAO {
 
 	public List<Integer> findTestsByRunID(int id_run) {
 		Query q = entityManager
-				.createQuery("select distinct id_test FROM " + RunTest.class.getName() + " where id_run = :id_run");
-		q.setParameter("id_run", id_run);
+				.createQuery(Constants.QUERY_FIND_TESTS_BY_RUN_ID);
+		q.setParameter("idRun", id_run);
 		List l = q.getResultList();
 		return l;
 	}
