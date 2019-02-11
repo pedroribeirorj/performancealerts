@@ -1,6 +1,9 @@
 package utils;
 
 public class Constants {
+	private Constants() {
+		
+	}
 	//evitar envio de emails ou persistências desnecessárias
 	public static final boolean TST_MODE = true;
 
@@ -40,9 +43,8 @@ public class Constants {
 	public static final int GRAVIDADE_VIOLACAO_NAO_CRITICA = 1;
 
 	// listas de emails
-	public static final String emailsOperacao = "pedroribeiro@id.uff.br";
-//	public static final String emailsGerencia = "pedro.h.silva@noesis.pt, renata.l.pinto@noesis.net.br, jose.cardoso@noesis.net.br";
-	public static final String emailsGerencia = "pedro.h.silva@noesis.pt";
+	public static final String EMAILS_OPERACAO = "pedroribeiro@id.uff.br";
+	public static final String EMAILS_GERENCIA = "pedro.h.silva@noesis.pt";
 	public static final boolean MAIL_DEBUG_MODE = true;
 	public static final boolean MAIL_PRD_MODE = false;
 	

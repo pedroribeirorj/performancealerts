@@ -5,11 +5,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Utils {
+	private Utils() {
+		
+	}
 
 	public static double doubleComDuasCasasDecimais(double a) {
 		String s = Double.toString(a);
-		if (s.lastIndexOf(".") != -1 && s.length() > s.lastIndexOf(".") + 3)
-			s = s.substring(0, s.lastIndexOf(".") + 3);
+		if (s.lastIndexOf('.') != -1 && s.length() > s.lastIndexOf('.') + 3)
+			s = s.substring(0, s.lastIndexOf('.') + 3);
 		else
 			s = s + "0";
 		return Double.parseDouble(s);

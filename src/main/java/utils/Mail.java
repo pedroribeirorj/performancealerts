@@ -12,6 +12,9 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 public class Mail {
+	private Mail() {
+
+	}
 
 	public static Properties getProperties() {
 		Properties props = new Properties();
@@ -20,21 +23,22 @@ public class Mail {
 		props.put("mail.smtp.socketFactory.port", "465");
 		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.ssl.checkserveridentity", "true");
 		props.put("mail.smtp.port", "465");
 		return props;
 	}
 
 	public static Session getSession(Properties props, final String auth) {
-		Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
+		return Session.getDefaultInstance(props, new javax.mail.Authenticator() {
+			@Override
 			protected PasswordAuthentication getPasswordAuthentication() {
 				return new PasswordAuthentication("noesisportugal0@gmail.com", auth);
 			}
 		});
-		return session;
 	}
 
 	public static Message montarMensagem(Session session, String remetente, String destinatarios, String assunto,
-			String corpo) throws Exception {
+			String corpo) throws MessagingException {
 		try {
 			if (validaDadosEmail(session, remetente, destinatarios, assunto, corpo)) {
 				Message message = new MimeMessage(session);
@@ -46,9 +50,9 @@ public class Mail {
 				message.setText(corpo);
 				return message;
 			}
-			throw new Exception("[PerformanceTest] Dados incompletos para envio de email.");
+			throw new IllegalArgumentException("[PerformanceTest] Dados incompletos para envio de email.");
 		} catch (MessagingException e) {
-			throw new RuntimeException(e);
+			throw new MessagingException(e.getMessage());
 		}
 	}
 
@@ -59,7 +63,7 @@ public class Mail {
 	}
 
 	public static boolean enviarEmail(String corpo, String destinatarios, String assunto, boolean debug)
-			throws Exception {
+			throws MessagingException {
 		final String remetente = "noesisportugal0@gmail.com";
 		final String auth = "TimNoesis";
 		Properties props = getProperties();
@@ -77,7 +81,7 @@ public class Mail {
 			throw new AuthenticationFailedException(
 					"O acesso a conta do remetente foi bloqueado pelo Google ou encontra-se com credenciais de acesso incorretas.");
 		} catch (MessagingException e) {
-			throw new RuntimeException(e);
+			throw new MessagingException(e.getMessage());
 		}
 
 	}

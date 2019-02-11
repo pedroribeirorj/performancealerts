@@ -15,8 +15,6 @@ import com.google.gson.Gson;
 import noesis.performancealerts.model.CasoDeTeste;
 import noesis.performancealerts.model.Run;
 import noesis.performancealerts.model.RunTest;
-import noesis.performancealerts.model.Task;
-import noesis.performancealerts.model.TaskLog;
 import noesis.performancealerts.model.Test;
 import utils.Constants;
 

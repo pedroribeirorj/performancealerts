@@ -71,7 +71,7 @@ public class AlertsController {
 	private void enviarEmailOperacao(String texto) throws Exception {
 		if (Constants.TST_MODE)
 			return;
-		Mail.enviarEmail(texto, Constants.emailsOperacao, "[MONITORIA-TIM] Erro de Performance",
+		Mail.enviarEmail(texto, Constants.EMAILS_OPERACAO, "[MONITORIA-TIM] Erro de Performance",
 				Constants.MAIL_PRD_MODE);
 		logger.error("[PerformanceAlerts] E-mail enviado para equipe operacional.");
 	}
@@ -79,7 +79,7 @@ public class AlertsController {
 	private void enviarEmailGerencia(String texto) throws Exception {
 		if (Constants.TST_MODE)
 			return;
-		Mail.enviarEmail(texto, Constants.emailsOperacao + "," + Constants.emailsGerencia,
+		Mail.enviarEmail(texto, Constants.EMAILS_OPERACAO + "," + Constants.EMAILS_GERENCIA,
 				"[MONITORIA-TIM] Erro de Performance", Constants.MAIL_PRD_MODE);
 		logger.error("[PerformanceAlerts] E-mail enviado para equipe operacional e gerencial.");
 	}
