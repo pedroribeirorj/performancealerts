@@ -2,6 +2,7 @@ package noesis.performancealerts.controller;
 
 import javax.mail.MessagingException;
 import javax.persistence.NoResultException;
+import static utils.Constants.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,28 +14,60 @@ import noesis.performancealerts.model.Alerts;
 import noesis.performancealerts.model.Run;
 import noesis.performancealerts.model.Test;
 import noesis.performancealerts.model.Violacao;
+import noesis.performancealerts.model.ViolacaoTipo;
 import utils.Constants;
 import utils.Mail;
+import utils.Slack;
+import utils.Utils;
 
 public class AlertsController {
 	static Logger logger = LoggerFactory.getLogger(AlertsController.class.getName());
 
-	public static void emitirAlerta(int idSuite, int idCasoDeTeste, Violacao v) throws MessagingException    {
+	public static void emitirAlerta(int idSuite, int idCasoDeTeste, Violacao v) throws MessagingException {
 		Run suite = RunJPADAO.getInstance().getById(idSuite);
 		Test ct = TestJPADAO.getInstance().getById(idCasoDeTeste);
 		if (suite == null || ct == null)
 			throw new NoResultException("[PerformanceAlert] Suíte ou caso de teste não encontrados.");
 		AlertsController alerts = new AlertsController();
 
-		String canal = suite.getCycleId();
+		String canal = ct.getProject_id();
 		String casoDeTeste = ct.getName_test();
-
 		String texto = alerts.montaCorpoEmail(v, canal, casoDeTeste);
 		Alerts alerta = new Alerts(v.getValue(), idSuite, ct.getId(), String.valueOf(suite.getData()),
 				String.valueOf(v.getTipoViolacao()), String.valueOf(v.getGravidadeViolacao()));
 
 		alerts.enviarEmail(texto, v.gravidadeCritica());
+		if (ALERTA_SLACK && !TST_MODE) {
+			String msgErro = messageErroSlack(v);
+			String gravidade = v.gravidadeCritica() ? "Crítica" : "Não Crítica";
+			alerts.enviarSlack(canal, suite.getCycleId(), casoDeTeste, suite.getIdRun(), msgErro, Utils.getDateTime(),
+					gravidade);
+		}
 		atualizarStatusAlerta(alerta);
+	}
+
+	private static String messageErroSlack(Violacao v) {
+		String msgErro = "";
+		int gravidade = ViolacaoTipo.procurarOpcao(v.getTipoViolacao());
+		switch (gravidade) {
+		case Constants.VIOLACAO_POR_MAXIMO_FALHAS_SEGUIDAS:
+			msgErro = v.getValue() + " falhas ocorridas em sequência";
+			break;
+		case Constants.VIOLACAO_POR_INDISPONIBILIDADE:
+			msgErro = "Falha por indisponibilidade (" + v.getValue() + "%)";
+			break;
+		case Constants.VIOLACAO_POR_LATENCIA:
+			msgErro = "Falha por latência (" + v.getValue() + "%)";
+			break;
+		default:
+			msgErro = "";
+		}
+		return msgErro;
+	}
+
+	private void enviarSlack(String canalCliente, String suite, String casoDeTeste, int idRun, String msgErro,
+			String dataHora, String gravidade) {
+		Slack.sendSlackMessage(canalCliente, suite, casoDeTeste, idRun, msgErro, dataHora, gravidade);
 	}
 
 	private static void atualizarStatusAlerta(Alerts alerta) {
@@ -69,7 +102,7 @@ public class AlertsController {
 		}
 	}
 
-	private void enviarEmailOperacao(String texto) throws MessagingException  {
+	private void enviarEmailOperacao(String texto) throws MessagingException {
 		if (Constants.TST_MODE) {
 			logger.warn("[PerformanceAlerts] E-mail não enviado por estar em modo debug.");
 			return;
@@ -80,7 +113,7 @@ public class AlertsController {
 		logger.error("[PerformanceAlerts] E-mail enviado para equipe operacional.");
 	}
 
-	private void enviarEmailGerencia(String texto) throws MessagingException  {
+	private void enviarEmailGerencia(String texto) throws MessagingException {
 		if (Constants.TST_MODE) {
 			logger.warn("[PerformanceAlerts] E-mail não enviado por estar em modo debug.");
 			return;

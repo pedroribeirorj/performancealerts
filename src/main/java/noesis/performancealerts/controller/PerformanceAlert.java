@@ -51,11 +51,10 @@ public class PerformanceAlert {
 				logger.info("[PerformanceAlerts] Validando regras de envio de alertas.");
 				Violacao v = Regra.analisaConformidade(suite.getCycleId(), testId);
 				if (v != null && v.existeViolacao()) {
-					logger.info("[PerformanceAlerts] Emitindo alerta para caso de teste %s.", testId);
+					logger.info("[PerformanceAlerts] Emitindo alerta para caso de teste "+String.valueOf(testId)+".");
 					AlertsController.emitirAlerta(suite.getIdRun(), testId, v);
 				} else {
-					logger.info("[PerformanceAlerts] Caso de teste %s da suite %s não apresenta violações de regras.",
-							testId, suite.getCycleId());
+					logger.info("[PerformanceAlerts] Caso de teste "+testId+" da suite "+suite.getCycleId()+" não apresenta violações de regras.");
 				}
 			}
 	}
