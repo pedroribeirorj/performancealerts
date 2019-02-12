@@ -16,7 +16,7 @@ public class Slack {
 
 	private String buildSlackMessage(String canal, String suite, String jornada, int idExecucao, String erroObs,
 			String dataHora, String gravidade) {
-		return String.format(MSG_FORMAT_SLACK, canal, suite, jornada, idExecucao, erroObs, dataHora,gravidade,
+		return String.format(MSG_FORMAT_SLACK, canal, suite, jornada, idExecucao, erroObs, dataHora, gravidade,
 				"#" + Constants.CHANNEL_NAME_SLACK);
 	}
 
@@ -46,6 +46,10 @@ public class Slack {
 
 	private static void getSlackResponse(HttpClient client, PostMethod post) {
 		try {
+			if (!ALERTA_SLACK || TST_MODE) {
+				logger.info("[PerformanceAlert] Slack está desabilitado ou aplicação se encontra em modo teste");
+				return;
+			}
 			int responseCode = client.executeMethod(post);
 			String response = post.getResponseBodyAsString();
 			if (responseCode != HttpStatus.SC_OK) {
@@ -61,9 +65,18 @@ public class Slack {
 	}
 
 	public static void sendSlackMessage(String canalCliente, String suite, String casoDeTeste, int idRun,
-			String msgErro, String dataHora,String gravidade) {
+			String msgErro, String dataHora, String gravidade) {
 		Slack s = new Slack();
+		if (suite == null || suite.isEmpty() )
+			throw new IllegalArgumentException(
+					"[PerformanceAlert] Suíte não informado para envio de mensageria Slack.");
+		if (gravidade == null || casoDeTeste.isEmpty())
+			throw new IllegalArgumentException(
+					"[PerformanceAlert] Nome do caso de teste não informado para envio de mensageria Slack.");
+		if (gravidade == null || gravidade.isEmpty())
+			throw new IllegalArgumentException(
+					"[PerformanceAlert] Gravidade de erro não informado para envio de mensageria Slack.");
 		Slack.sendSlackMessage(
-				s.buildSlackMessage(canalCliente,suite,casoDeTeste,idRun,msgErro,dataHora,gravidade));
+				s.buildSlackMessage(canalCliente, suite, casoDeTeste, idRun, msgErro, dataHora, gravidade));
 	}
 }

@@ -18,7 +18,7 @@ public class Run {
 	String cycleId;
 	@Column(name="version_id")
 	String versionId;
-	@Column(name="projectId")
+	@Column(name="project_id")
 	String projectId;
 	@Column(name="fk_appType")
 	int fkAappType;

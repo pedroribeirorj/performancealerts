@@ -83,10 +83,10 @@ public class AlertsController {
 		String texto = "A Monitoria de Performance identificou um problema no canal " + canal + ", na jornada "
 				+ casoDeTeste + ".";
 		if (v.violacaoFalhasSeguidas()) {
-			texto += "A jornada obteve falhas seguidas acima do permitido.";
+			texto += "A jornada obteve falhas seguidas acima do permitido (" +v.getValue() +"%).";
 		} else {
 			if (v.violacaoIndisponibilidade()) {
-				texto += "A jornada esteve indisponível acima do percentual permitido.";
+				texto += "A jornada esteve indisponível acima do percentual permitido (" +v.getValue() +"%).";
 			}
 		}
 		return texto;

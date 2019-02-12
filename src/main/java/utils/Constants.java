@@ -6,9 +6,9 @@ public class Constants {
 	private Constants() {
 	}
 
-	// evitar envio de emails ou persistências desnecessárias
-	public static final boolean TST_MODE = false;
-	public static final boolean ALERTA_SLACK = true;
+	// evitar envio de emails, slack e persistências
+	public static final boolean TST_MODE = true;
+	public static final boolean ALERTA_SLACK = false;
 
 	public static final String RECUPERA_JORNADAS_POR_SUITES = "select r,rt,t " + "from Run r, RunTest rt, Test t "
 			+ " where rt.idRun = r.idRun " + " and rt.idTest = t.id " + " and t.testCycleId = ?1" + " and t.id = ?2 "
@@ -35,11 +35,11 @@ public class Constants {
 	public static final int VIOLACAO_POR_MAXIMO_FALHAS_SEGUIDAS = 1;
 	public static final int VIOLACAO_POR_INDISPONIBILIDADE = 2;
 	public static final int VIOLACAO_POR_LATENCIA = 3;
-	
+
 	// níveis de violação de regras
 	public static final int GRAVIDADE_VIOLACAO_CRITICA = 0;
 	public static final int GRAVIDADE_VIOLACAO_NAO_CRITICA = 1;
-	
+
 	// listas de emails
 	public static final String EMAILS_OPERACAO = "pedroribeiro@id.uff.br";
 	public static final String EMAILS_GERENCIA = "pedro.h.silva@noesis.pt";
@@ -52,10 +52,10 @@ public class Constants {
 
 	public static final String QUERY_FIND_TESTS_BY_RUN_ID = "select distinct idTest FROM " + RunTest.class.getName()
 			+ " where idRun = :idRun";
-	
+
 	public static final String URL_SLACK = "https://hooks.slack.com/services/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";
 	public static final String CHANNEL_NAME_SLACK = "#noesismessengertest";
 	public static final String TEAM_NAME_SLACK = "tim-noesis";
 	public static final String USERNAME_SLACK = "Pedro Ribeiro";
-	public static String MSG_FORMAT_SLACK= "Canal: %s \n Suíte: %s\n Jornada: %s\n ID: %s\n Erro: %s\n Data/Hora: %s\n Gravidade: %s";
+	public static String MSG_FORMAT_SLACK = "Canal: %s \n Suíte: %s\n Jornada: %s\n ID: %s\n Erro: %s\n Data/Hora: %s\n Gravidade: %s";
 }
