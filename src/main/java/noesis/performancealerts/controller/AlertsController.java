@@ -23,25 +23,19 @@ import utils.Utils;
 public class AlertsController {
 	static Logger logger = LoggerFactory.getLogger(AlertsController.class.getName());
 
-	public static void emitirAlerta(int idSuite, int idCasoDeTeste, Violacao v) throws MessagingException {
-		Run suite = RunJPADAO.getInstance().getById(idSuite);
-		Test ct = TestJPADAO.getInstance().getById(idCasoDeTeste);
-		if (suite == null || ct == null)
-			throw new NoResultException("[PerformanceAlert] Suíte ou caso de teste não encontrados.");
+	public static void emitirAlerta(Test teste, Violacao v, int lastRun) throws MessagingException {
 		AlertsController alerts = new AlertsController();
-
-		String canal = ct.getProject_id();
-		String casoDeTeste = ct.getName_test();
-		String texto = alerts.montaCorpoEmail(v, canal, casoDeTeste);
-		Alerts alerta = new Alerts(v.getValue(), idSuite, ct.getId(), String.valueOf(suite.getData()),
-				String.valueOf(v.getTipoViolacao()), String.valueOf(v.getGravidadeViolacao()));
+		String idSuite = teste.getTest_cycle_id();
+		String casoDeTeste = teste.getName_test();
+		String texto = alerts.montaCorpoEmail(v, casoDeTeste);
+		Alerts alerta = new Alerts(v.getValue(), teste.getId(), Utils.getDateTime(),
+				String.valueOf(v.getTipoViolacao()), String.valueOf(v.getGravidadeViolacao()),lastRun );
 
 		alerts.enviarEmail(texto, v.gravidadeCritica());
 		if (ALERTA_SLACK && !TST_MODE) {
 			String msgErro = messageErroSlack(v);
 			String gravidade = v.gravidadeCritica() ? "Crítica" : "Não Crítica";
-			alerts.enviarSlack(canal, suite.getCycleId(), casoDeTeste, suite.getIdRun(), msgErro, Utils.getDateTime(),
-					gravidade);
+			alerts.enviarSlack(idSuite, casoDeTeste, teste.getId(), msgErro, Utils.getDateTime(), gravidade);
 		}
 		atualizarStatusAlerta(alerta);
 	}
@@ -65,9 +59,9 @@ public class AlertsController {
 		return msgErro;
 	}
 
-	private void enviarSlack(String canalCliente, String suite, String casoDeTeste, int idRun, String msgErro,
-			String dataHora, String gravidade) {
-		Slack.sendSlackMessage(canalCliente, suite, casoDeTeste, idRun, msgErro, dataHora, gravidade);
+	private void enviarSlack(String suite, String casoDeTeste, int idRun, String msgErro, String dataHora,
+			String gravidade) {
+		Slack.sendSlackMessage(suite, casoDeTeste, idRun, msgErro, dataHora, gravidade);
 	}
 
 	private static void atualizarStatusAlerta(Alerts alerta) {
@@ -79,14 +73,13 @@ public class AlertsController {
 		logger.error("[PerformanceAlerts] Emissão de alerta persistido na base de dados.");
 	}
 
-	private String montaCorpoEmail(Violacao v, String canal, String casoDeTeste) {
-		String texto = "A Monitoria de Performance identificou um problema no canal " + canal + ", na jornada "
-				+ casoDeTeste + ".";
+	private String montaCorpoEmail(Violacao v, String casoDeTeste) {
+		String texto = "A Monitoria de Performance identificou um problema na jornada " + casoDeTeste + ".";
 		if (v.violacaoFalhasSeguidas()) {
-			texto += "A jornada obteve falhas seguidas acima do permitido (" +v.getValue() +"%).";
+			texto += "A jornada obteve falhas seguidas acima do permitido (" + v.getValue() + "%).";
 		} else {
 			if (v.violacaoIndisponibilidade()) {
-				texto += "A jornada esteve indisponível acima do percentual permitido (" +v.getValue() +"%).";
+				texto += "A jornada esteve indisponível acima do percentual permitido (" + v.getValue() + "%).";
 			}
 		}
 		return texto;

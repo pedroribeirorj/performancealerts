@@ -135,25 +135,25 @@ public class RunJPADAO {
 		return j;
 	}
 
-	public List<CasoDeTeste> recuperaCasosDeTestePorSuite(String suiteId, int idCasoDeTeste) {
-		// recupera as 100 jornadas mais recentes de uma suíte
-
-		Query q = entityManager
-				.createQuery(Constants.RECUPERA_JORNADAS_POR_SUITES + " limit " + Constants.VOLUME_AMOSTRAL);
-		q.setParameter(1, suiteId);
-		q.setParameter(2, idCasoDeTeste);
-		List query = q.getResultList();
-
-		List<CasoDeTeste> casoDeTestes = new ArrayList<CasoDeTeste>();
-
-		for (Iterator iterator = query.iterator(); iterator.hasNext();) {
-			// Query contém os registros da consulta
-			// Cada objeto é uma linha, que será dividida em classes
-			Object[] object = (Object[]) iterator.next();
-			CasoDeTeste j = montaCasodeTeste(object);
-			casoDeTestes.add(j);
-		}
-		return casoDeTestes;
-
-	}
+//	public List<CasoDeTeste> recuperaCasosDeTestePorSuite(String suiteId, int idCasoDeTeste) {
+//		// recupera as 100 jornadas mais recentes de uma suíte
+//
+//		Query q = entityManager
+//				.createQuery(Constants.RECUPERA_JORNADAS_POR_SUITES + " limit " + Constants.VOLUME_AMOSTRAL);
+//		q.setParameter(1, suiteId);
+//		q.setParameter(2, idCasoDeTeste);
+//		List query = q.getResultList();
+//
+//		List<CasoDeTeste> casoDeTestes = new ArrayList<CasoDeTeste>();
+//
+//		for (Iterator iterator = query.iterator(); iterator.hasNext();) {
+//			// Query contém os registros da consulta
+//			// Cada objeto é uma linha, que será dividida em classes
+//			Object[] object = (Object[]) iterator.next();
+//			CasoDeTeste j = montaCasodeTeste(object);
+//			casoDeTestes.add(j);
+//		}
+//		return casoDeTestes;
+//
+//	}
 }

@@ -21,7 +21,6 @@ public class Test {
 	Timestamp createdDate;
 	@Column(name = "updated_date")
 	Timestamp updatedDate;
-
 	@Column(name = "name_test")
 	String name_test;
 	@Column(name = "description")

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,6 +78,13 @@ public class AlertsJPADAO {
 		}
 	}
 
+	public List<Alerts> findRunsByTestID(int idTest, int idLastRun) {
+		Query q = entityManager.createQuery("from Alerts where idTest = :idTest and idLastRun = :idLastRun");
+		q.setParameter("idTest", idTest);
+		q.setParameter("idLastRun", idLastRun);
+		return q.getResultList();
+	}
+	
 	public void remove(Alerts alerts) {
 		try {
 			entityManager.getTransaction().begin();

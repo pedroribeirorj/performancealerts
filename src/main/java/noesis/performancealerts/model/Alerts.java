@@ -4,6 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Table;
+
+import utils.Utils;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
@@ -13,13 +16,13 @@ import javax.persistence.SequenceGenerator;
 public class Alerts {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "id_test")
-    @Column(name = "id", unique = true, nullable = false)
-    @SequenceGenerator(name = "id_test", sequenceName = "seq_tbl_alerts", allocationSize = 1)
+	@Column(name = "id", unique = true, nullable = false)
+	@SequenceGenerator(name = "id_test", sequenceName = "seq_tbl_alerts", allocationSize = 1)
 	int id;
-	@Column(name="id_test")
+	@Column(name = "id_test")
 	int idTest;
-	@Column(name="id_run")
-	int idRun;
+	@Column(name = "id_last_run")
+	int idLastRun;
 	@Column
 	String data;
 	@Column
@@ -33,13 +36,25 @@ public class Alerts {
 		// Classe de modelo da tabela alertas (tbl_alerts).
 	}
 
-	public Alerts(String value, int idRun, int idTest, String data, String typeError, String severity) {
+	public int getIdLastRun() {
+		return idLastRun;
+	}
+
+	public void setIdLastRun(int idLastRun) {
+		this.idLastRun = idLastRun;
+	}
+
+	public String getSeverity() {
+		return severity;
+	}
+
+	public Alerts(String value, int idTest, String data, String typeError, String severity, int lastRun) {
 		this.idTest = idTest;
-		this.idRun = idRun;
 		this.data = data;
 		this.typeError = typeError;
 		this.severity = severity;
 		this.value = value;
+		this.idLastRun = lastRun;
 	}
 
 	public int getId() {
@@ -56,14 +71,6 @@ public class Alerts {
 
 	public void setIdTest(int idTest) {
 		this.idTest = idTest;
-	}
-
-	public int getIdRun() {
-		return idRun;
-	}
-
-	public void setIdRun(int idRun) {
-		this.idRun = idRun;
 	}
 
 	public String getData() {

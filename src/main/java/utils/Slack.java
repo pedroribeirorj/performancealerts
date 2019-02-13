@@ -14,9 +14,9 @@ import org.slf4j.LoggerFactory;
 public class Slack {
 	static Logger logger = LoggerFactory.getLogger(Slack.class.getName());
 
-	private String buildSlackMessage(String canal, String suite, String jornada, int idExecucao, String erroObs,
+	private String buildSlackMessage(String suite, String jornada, int idExecucao, String erroObs,
 			String dataHora, String gravidade) {
-		return String.format(MSG_FORMAT_SLACK, canal, suite, jornada, idExecucao, erroObs, dataHora, gravidade,
+		return String.format(MSG_FORMAT_SLACK, suite, jornada, idExecucao, erroObs, dataHora, gravidade,
 				"#" + Constants.CHANNEL_NAME_SLACK);
 	}
 
@@ -64,7 +64,7 @@ public class Slack {
 		}
 	}
 
-	public static void sendSlackMessage(String canalCliente, String suite, String casoDeTeste, int idRun,
+	public static void sendSlackMessage(String suite, String casoDeTeste, int idRun,
 			String msgErro, String dataHora, String gravidade) {
 		Slack s = new Slack();
 		if (suite == null || suite.isEmpty() )
@@ -77,6 +77,6 @@ public class Slack {
 			throw new IllegalArgumentException(
 					"[PerformanceAlert] Gravidade de erro não informado para envio de mensageria Slack.");
 		Slack.sendSlackMessage(
-				s.buildSlackMessage(canalCliente, suite, casoDeTeste, idRun, msgErro, dataHora, gravidade));
+				s.buildSlackMessage(suite, casoDeTeste, idRun, msgErro, dataHora, gravidade));
 	}
 }

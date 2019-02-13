@@ -58,6 +58,13 @@ public class TestJPADAO {
 	public List<Test> findAll() {
 		return entityManager.createQuery("FROM " + Test.class.getName()).getResultList();
 	}
+	
+	public List<Test> findAllTestsByProject(String projectId) {
+		Query q = entityManager.createQuery("FROM " + Test.class.getName() + " where project_id = :projectId");
+		q.setParameter("projectId", projectId);
+		return q.getResultList();
+	}
+	
 
 	public void persist(Test test) {
 		try {

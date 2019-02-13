@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import org.junit.Test;
 
 import noesis.performancealerts.controller.Regra;
-import noesis.performancealerts.model.CasoDeTeste;
+import noesis.performancealerts.model.RunTest;
 import utils.Constants;
 
 public class RegraTest {
@@ -116,6 +116,6 @@ public class RegraTest {
 	@Test
 	public void getDisponibilidade_JornadaVazia() throws Exception {
 
-		assertEquals(new Double(100), (double) regra.getDisponibilidade(new ArrayList<CasoDeTeste>()), 0);
+		assertEquals(new Double(100), (double) regra.getDisponibilidade(new ArrayList<RunTest>()), 0);
 	}
 }

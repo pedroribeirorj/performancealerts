@@ -1,5 +1,7 @@
 package noesis.performancealerts.controller;
 
+import java.rmi.UnexpectedException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -9,32 +11,44 @@ import org.slf4j.LoggerFactory;
 import utils.Constants;
 import utils.Utils;
 import noesis.performancealerts.dao.RunJPADAO;
+import noesis.performancealerts.dao.RunTestJPADAO;
 import noesis.performancealerts.model.CasoDeTeste;
+import noesis.performancealerts.model.RunTest;
+import noesis.performancealerts.model.Test;
 import noesis.performancealerts.model.Violacao;
 
 public class Regra {
 	static Logger logger = LoggerFactory.getLogger(Regra.class.getName());
 
-	public static Violacao analisaConformidade(String idSuite, int idCasoDeTeste) {
-
+	public static Violacao analisaConformidade(List<Integer> runIds, Test teste) throws UnexpectedException {
 		// analisa se há inconformidade para um caso de teste de uma suíte considerando
-
 		// um volume amostral e regras de negócio
 		Regra r = new Regra();
-		List<CasoDeTeste> casoDeTeste = RunJPADAO.getInstance().recuperaCasosDeTestePorSuite(idSuite, idCasoDeTeste);
-		if (casoDeTeste.isEmpty())
+		if (teste == null)
 			return null;
 
+		List<RunTest> rts = new ArrayList<RunTest>();
+		int idTest = teste.getId();
+		for (Iterator iterator = runIds.iterator(); iterator.hasNext();) {
+			int idRun = (Integer) iterator.next();
+			List<RunTest> rt = RunTestJPADAO.getInstance().findByRunAndTest(idRun, idTest);
+			if (rt.size() == 1)
+				rts.add(rt.get(0));
+			else
+				throw new UnexpectedException(
+						"[PerformanceAlerts] Erro na base de dados: Existem mais de um par de idRun-idTeste na tabela RunTest");
+		}
+
 		// valida existencia de sequencia de erros além do permitido
-		int falhasSeguidas = r.analisaSequenciaErros(casoDeTeste);
-		if (falhasSeguidas > Constants.MAXIMO_FALHAS_SEGUIDAS_PERMITIDAS) {
+		int falhasSeguidas = r.analisaSequenciaErros(rts);
+		if (falhasSeguidas != -1) {
 			logger.error("[PerformanceAlerts] Identificado caso de teste com erros em sequência.");
 			return new Violacao(Constants.VIOLACAO_POR_MAXIMO_FALHAS_SEGUIDAS, Constants.GRAVIDADE_VIOLACAO_CRITICA,
 					String.valueOf(falhasSeguidas));
 		}
 
 		// valida violacao de regra de indisponibilidade
-		Object obj = r.analisaDisponibilidade(casoDeTeste);
+		Object obj = r.analisaDisponibilidade(rts);
 		if (obj != null) {
 			logger.info("[PerformanceAlerts] Identificado caso de teste com erro de indisponibilidade.");
 			return (Violacao) obj;
@@ -43,29 +57,37 @@ public class Regra {
 		return null;
 	}
 
-	public int analisaSequenciaErros(List<CasoDeTeste> j) {
-
+	public int analisaSequenciaErros(List<RunTest> rts) {
 		int contador = 0;
-		for (Iterator iterator = j.iterator(); iterator.hasNext();) {
-			CasoDeTeste casoDeTeste = (CasoDeTeste) iterator.next();
-			if (casoDeTeste.getRunTest().getStatus() == Constants.STATUS_FAILED) {
+		int maxFalhasOcorridas = 0;
+		boolean naoEstourouLimite = false;
+		for (Iterator iterator = rts.iterator(); iterator.hasNext();) {
+			RunTest rt = (RunTest) iterator.next();
+			if (rt.getStatus() == Constants.STATUS_FAILED) {
 				contador++;
 			} else {
 				contador = 0;
+				if (maxFalhasOcorridas > Constants.MAXIMO_FALHAS_SEGUIDAS_PERMITIDAS) {
+					return maxFalhasOcorridas;
+				}
+			}
+			if (contador > Constants.MAXIMO_FALHAS_SEGUIDAS_PERMITIDAS && !naoEstourouLimite) {
+				maxFalhasOcorridas = contador;
+				naoEstourouLimite = !naoEstourouLimite;
 			}
 		}
-		return contador;
+		return -1;
 	}
 
-	public double getDisponibilidade(List<CasoDeTeste> j) {
+	public double getDisponibilidade(List<RunTest> rts) {
 		int contadorPassed = 0;
-		int totalCasos = j.size();
+		int totalCasos = rts.size();
 		if (totalCasos == 0)
 			return 100.00;
 
-		for (Iterator iterator = j.iterator(); iterator.hasNext();) {
-			CasoDeTeste casoDeTeste = (CasoDeTeste) iterator.next();
-			if (casoDeTeste.getRunTest().isPassed()) {
+		for (Iterator iterator = rts.iterator(); iterator.hasNext();) {
+			RunTest rt = (RunTest) iterator.next();
+			if (rt.isPassed()) {
 				contadorPassed++;
 			}
 		}
@@ -75,8 +97,8 @@ public class Regra {
 
 	}
 
-	public Violacao analisaDisponibilidade(List<CasoDeTeste> j) {
-		double disponibilidade = getDisponibilidade(j);
+	public Violacao analisaDisponibilidade(List<RunTest> rt) {
+		double disponibilidade = getDisponibilidade(rt);
 		int tipoViolacao = -1;
 		int gravidadeViolacao = -1;
 		if (disponibilidadeOK(disponibilidade)) {
@@ -115,4 +137,5 @@ public class Regra {
 	public boolean latenciaCritica(double latencia) {
 		return rangeDisponibilidadeLatencia(latencia) && latencia < Constants.THRESHOLD_LATENCIA_MINIMA;
 	}
+
 }

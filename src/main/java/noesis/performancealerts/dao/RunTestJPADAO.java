@@ -17,6 +17,7 @@ public class RunTestJPADAO {
 	private static RunTestJPADAO instance;
 	protected EntityManager entityManager;
 	static Logger logger = LoggerFactory.getLogger(RunTestJPADAO.class.getName());
+
 	public static RunTestJPADAO getInstance() {
 		if (instance == null) {
 			instance = new RunTestJPADAO();
@@ -47,10 +48,30 @@ public class RunTestJPADAO {
 		return entityManager.createQuery("FROM " + RunTest.class.getName()).getResultList();
 	}
 
-	public List<Integer> findTestsByRunID(int idRun) {
+	public List<RunTest> findByRunAndTest(int idRun, int idTest) {
 		Query q = entityManager
-				.createQuery(Constants.QUERY_FIND_TESTS_BY_RUN_ID);
+				.createQuery("FROM " + RunTest.class.getName() + " where idRun = :idRun and idTest=:idTest");
 		q.setParameter("idRun", idRun);
+		q.setParameter("idTest", idTest);
+		return q.getResultList();
+	}
+
+	public List<Integer> findTestsByRunID(int idRun) {
+		Query q = entityManager.createQuery(Constants.QUERY_FIND_TESTS_BY_RUN_ID);
+		q.setParameter("idRun", idRun);
+		return q.getResultList();
+	}
+
+	public List<Integer> findLastsRunsByTestID(int idTest) {
+		Query q = entityManager.createQuery(Constants.QUERY_FIND_TESTS_BY_LASTS_RUNS_BY_RUN_ID);
+		q.setParameter("idTest", idTest);
+		q.setMaxResults(Constants.VOLUME_AMOSTRAL);
+		return q.getResultList();
+	}
+
+	public List<Integer> findRunsByTestID(int idTest) {
+		Query q = entityManager.createQuery(Constants.QUERY_FIND_TESTS_BY_RUN_ID);
+		q.setParameter("idTest", idTest);
 		return q.getResultList();
 	}
 

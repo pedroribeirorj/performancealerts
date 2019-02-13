@@ -32,7 +32,6 @@ public class AlertsJPADAOTest {
 		alert = new Alerts();
 		alert.setData(String.valueOf(new Timestamp(System.currentTimeMillis())));
 		alert.setId(-1);
-		alert.setIdRun(1);
 		alert.setIdTest(1);
 		alert.setSeverity(String.valueOf(Constants.GRAVIDADE_VIOLACAO_CRITICA));
 		alert.setTypeError(String.valueOf(Constants.VIOLACAO_POR_INDISPONIBILIDADE));
@@ -85,7 +84,6 @@ public class AlertsJPADAOTest {
 		alert = new Alerts();
 		alert.setData(String.valueOf(new Timestamp(System.currentTimeMillis())));
 		alert.setId(-1);
-		alert.setIdRun(1);
 		alert.setIdTest(1);
 		alert.setSeverity(String.valueOf(Constants.GRAVIDADE_VIOLACAO_CRITICA));
 		alert.setTypeError(String.valueOf(Constants.VIOLACAO_POR_INDISPONIBILIDADE));
@@ -101,7 +99,6 @@ public class AlertsJPADAOTest {
 		alert = new Alerts();
 		alert.setData(String.valueOf(new Timestamp(System.currentTimeMillis())));
 		alert.setId(-1);
-		alert.setIdRun(1);
 		alert.setIdTest(1);
 		alert.setSeverity(String.valueOf(Constants.GRAVIDADE_VIOLACAO_CRITICA));
 		alert.setTypeError(String.valueOf(Constants.VIOLACAO_POR_INDISPONIBILIDADE));

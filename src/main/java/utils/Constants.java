@@ -7,13 +7,13 @@ public class Constants {
 	}
 
 	// evitar envio de emails, slack e persistências
-	public static final boolean TST_MODE = true;
+	public static final boolean TST_MODE = false;
 	public static final boolean ALERTA_SLACK = false;
 
-	public static final String RECUPERA_JORNADAS_POR_SUITES = "select r,rt,t " + "from Run r, RunTest rt, Test t "
-			+ " where rt.idRun = r.idRun " + " and rt.idTest = t.id " + " and t.testCycleId = ?1" + " and t.id = ?2 "
-			+ " and (t.id ,r.idRun, r.data) not in (select a.idTest ,    a.idRun , a.data from Alerts a)"
-			+ " order by t.testCycleId, " + "r.data desc ";
+//	public static final String RECUPERA_JORNADAS_POR_SUITES = "select r,rt,t " + "from Run r, RunTest rt, Test t "
+//			+ " where rt.idRun = r.idRun " + " and rt.idTest = t.id " + " and t.testCycleId = ?1" + " and t.id = ?2 "
+//			+ " and (t.id ,r.idRun, r.data) not in (select a.idTest ,    a.idRun , a.data from Alerts a)"
+//			+ " order by t.testCycleId, " + "r.data desc ";
 
 	// limites
 	public static final int MAXIMO_FALHAS_SEGUIDAS_PERMITIDAS = 3;
@@ -50,12 +50,20 @@ public class Constants {
 	public static final int REPOSITORY_TYPE_TFS = 2;
 	public static final int REPOSITORY_TYPE_XRAY = 3;
 
-	public static final String QUERY_FIND_TESTS_BY_RUN_ID = "select distinct idTest FROM " + RunTest.class.getName()
+	public static final String QUERY_FIND_TESTS_BY_RUN_ID = "select idTest FROM " + RunTest.class.getName()
+			+ " where idRun = :idRun and projectId = :projectId";
+
+	
+	public static final String QUERY_FIND_TESTS_BY_LASTS_RUNS_BY_RUN_ID = "SELECT r.idRun " + "	FROM RunTest rt, Run r "
+			+ "	where  r.idRun = rt.idRun and rt.idTest = :idTest "
+			+ "order by r.data desc ";
+
+	public static final String QUERY_FIND_RUNS_BY_TEST_ID = "select distinct idTest FROM " + RunTest.class.getName()
 			+ " where idRun = :idRun";
 
 	public static final String URL_SLACK = "https://hooks.slack.com/services/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";
 	public static final String CHANNEL_NAME_SLACK = "#noesismessengertest";
 	public static final String TEAM_NAME_SLACK = "tim-noesis";
 	public static final String USERNAME_SLACK = "Pedro Ribeiro";
-	public static String MSG_FORMAT_SLACK = "Canal: %s \n Suíte: %s\n Jornada: %s\n ID: %s\n Erro: %s\n Data/Hora: %s\n Gravidade: %s";
+	public static String MSG_FORMAT_SLACK = "Suíte: %s\n Jornada: %s\n ID: %s\n Erro: %s\n Data/Hora: %s\n Gravidade: %s";
 }
