@@ -11,10 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import noesis.performancealerts.dao.AlertsJPADAO;
-import noesis.performancealerts.dao.RunJPADAO;
 import noesis.performancealerts.dao.RunTestJPADAO;
 import noesis.performancealerts.dao.TestJPADAO;
-import noesis.performancealerts.model.Run;
 import noesis.performancealerts.model.Test;
 import noesis.performancealerts.model.Violacao;
 

@@ -17,39 +17,31 @@ import utils.Mail;
 import static org.mockito.Mockito.*;
 
 public class AlertsControllerTest {
-//	@Test
-//	public void emitirAlerta_SuiteCTExistente() throws Exception {
-//		try {
-//			Run suite = RunJPADAO.getInstance().getAnyRun();
-//			noesis.performancealerts.model.Test ct = (noesis.performancealerts.model.Test) TestJPADAO.getInstance()
-//					.getAnyTest();
-//			if (suite != null && ct != null) {
-//				AlertsController.emitirAlerta(suite.getIdRun(), ct.getId(), mock(Violacao.class));
-//			}
-//			assert (true);
-//		} catch (Exception e) {
-//			assert (true);
-//		}
-//	}
+	@Test
+	public void emitirAlerta_SuiteCTExistente() throws Exception {
+		try {
+			Run suite = RunJPADAO.getInstance().getAnyRun();
+			noesis.performancealerts.model.Test ct = (noesis.performancealerts.model.Test) TestJPADAO.getInstance()
+					.getAnyTest();
+			if (suite != null && ct != null) {
+				AlertsController.emitirAlerta(ct, mock(Violacao.class), 1);
+			}
+			assert (true);
+		} catch (Exception e) {
+			assert (true);
+		}
+	}
 
-//	@Test
-//	public void emitirAlerta_SuiteCTInexistente() throws Exception {
-//		try {
-//			AlertsController.emitirAlerta(new Integer(-1), new Integer(-1), mock(Violacao.class));
-//			assert (false);
-//		} catch (Exception e) {
-//			assert (true);
-//		}
-//	}
+	@Test
+	public void emitirAlerta_SuiteCTInexistente() throws Exception {
+		try {
+			AlertsController.emitirAlerta(null, mock(Violacao.class), new Integer(-1));
+			assert (false);
+		} catch (Exception e) {
+			assert (true);
+		}
+	}
 
-//	@Test
-//	public void atualizarStatusAlerta(Alerts alerta) {
-//	}
-
-//	@Test
-//	private String montaCorpoEmail(Violacao v, String canal, String casoDeTeste) {
-//	}
-//
 	@Test
 	public void enviarEmail() throws Exception {
 		try {
@@ -60,13 +52,5 @@ public class AlertsControllerTest {
 			assert (false);
 		}
 	}
-//
-//	@Test
-//	public void enviarEmailOperacao(String texto) throws Exception {
-//	}
-//
-//	@Test
-//	public void enviarEmailGerencia(String texto) throws Exception {
-//	}
 
 }

@@ -10,6 +10,7 @@ import org.junit.rules.ExpectedException;
 
 import noesis.performancealerts.controller.PerformanceAlert;
 import noesis.performancealerts.dao.RunJPADAO;
+import noesis.performancealerts.dao.TestJPADAO;
 import noesis.performancealerts.model.Run;
 import static org.mockito.Mockito.*;
 
@@ -19,7 +20,6 @@ public class PerformanceAlertTest {
 	@Rule
 	public ExpectedException exceptionRule = ExpectedException.none();
 
-	
 	public PerformanceAlertTest() {
 		performanceAlert = new PerformanceAlert();
 	}
@@ -46,58 +46,55 @@ public class PerformanceAlertTest {
 		}
 	}
 
-//	@Test
-//	public void analisarSuites_ComJornadas() {
-//		try {
-//			Run r = RunJPADAO.getInstance().getAnyRun();
-//			List<Run> suites = new ArrayList<Run>();
-//			suites.add(r);
-//			performanceAlert.analisarExecucoesDeTeste(suites);
-//			assert (true);
-//		} catch (Exception e) {
-//			assert (false);
-//		}
-//	}
-//
-//	@Test
-//	public void analisarCasosDeTeste_suiteSemJornadas() {
-//		try {
-//			Run suite = mock(Run.class);
-//			performanceAlert.analisarExecucoesDoCasoDeTeste(suite, new ArrayList<Integer>());
-//			performanceAlert.analisarExecucoesDoCasoDeTeste(suite, null);
-//			assert (true);
-//		} catch (Exception e) {
-//			assert (false);
-//		}
-//	}
-//
-//	@Test
-//	public void analisarCasosDeTeste_jornadaSemViolacao() {
-//		try {
-//			Run suite = mock(Run.class);
-//			suite.setCycleId("7");
-//			List<Integer> idsTest = new ArrayList<Integer>();
-//			idsTest.add(7);
-//			performanceAlert.analisarExecucoesDoCasoDeTeste(suite, idsTest);
-//			assert (true);
-//		} catch (Exception e) {
-//			assert (false);
-//		}
-//	}
-//
-//	@Test
-//	public void analisarCasosDeTeste_jornadaComViolacao() {
-//		try {
-//			Run suite = mock(Run.class);
-//			suite.setCycleId("7");
-//			List<Integer> idsTest = new ArrayList<Integer>();
-//			idsTest.add(661);
-//			performanceAlert.analisarExecucoesDoCasoDeTeste(suite, idsTest);
-//			assert (true);
-//		} catch (Exception e) {
-//			assert (false);
-//		}
-//	}
+	@Test
+	public void analisarSuites_ComJornadas() {
+		try {
+			noesis.performancealerts.model.Test t = TestJPADAO.getInstance().getAnyTest();
+			List<noesis.performancealerts.model.Test> testes = new ArrayList<noesis.performancealerts.model.Test>();
+			testes.add(t);
+			performanceAlert.analisarExecucoesDeTeste(testes);
+			assert (true);
+		} catch (Exception e) {
+			assert (false);
+		}
+	}
+
+	@Test
+	public void analisarCasosDeTeste_suiteSemJornadas() {
+		try {
+			noesis.performancealerts.model.Test t = TestJPADAO.getInstance().getAnyTest();
+			performanceAlert.analisarExecucoesDoCasoDeTeste(t, new ArrayList<Integer>());
+			performanceAlert.analisarExecucoesDoCasoDeTeste(t, null);
+			assert (true);
+		} catch (Exception e) {
+			assert (false);
+		}
+	}
+
+	@Test
+	public void analisarCasosDeTeste_jornadaSemViolacao() {
+		try {
+			noesis.performancealerts.model.Test t = TestJPADAO.getInstance().getAnyTest();
+			performanceAlert.analisarExecucoesDoCasoDeTeste(t, new ArrayList<Integer>());
+			assert (true);
+		} catch (Exception e) {
+			assert (false);
+		}
+	}
+
+	@Test
+	public void analisarCasosDeTeste_jornadaComViolacao() {
+		try {
+			noesis.performancealerts.model.Test t = TestJPADAO.getInstance().getAnyTest();
+			t.setTest_cycle_id("7");
+			List<Integer> testes = new ArrayList<Integer>();
+			testes.add(661);
+			performanceAlert.analisarExecucoesDoCasoDeTeste(t, testes);
+			assert (true);
+		} catch (Exception e) {
+			assert (false);
+		}
+	}
 
 	@Test
 	public void run() {

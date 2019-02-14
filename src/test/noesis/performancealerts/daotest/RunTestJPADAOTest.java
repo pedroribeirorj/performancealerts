@@ -30,12 +30,10 @@ public class RunTestJPADAOTest {
 
 	@Before
 	public void setUp() {
-		Run r = RunJPADAO.getInstance().getAnyRun();
-		noesis.performancealerts.model.Test t = (noesis.performancealerts.model.Test) TestJPADAO.getInstance().getAnyTest();
 		runTest = new RunTest();
 		runTest.setId(-1);
-		runTest.setIdRun(r.getIdRun());
-		runTest.setIdTest(t.getId());
+		runTest.setIdRun(-1);
+		runTest.setIdTest(-1);
 		runTest.setStatus(1);
 		dao = RunTestJPADAO.getInstance();
 	}
@@ -47,7 +45,8 @@ public class RunTestJPADAOTest {
 	@Test
 	public void persist() {
 		try {
-			dao.persist(runTest);
+			if (runTest != null)
+				dao.persist(runTest);
 			assert (true);
 		} catch (Exception e) {
 			assert (false);

@@ -10,33 +10,6 @@ import org.junit.Test;
 import utils.Slack;
 
 public class SlackTest {
-
-//	@Test
-//	public String buildSlackMessage(String canal, String suite, String jornada, int idExecucao, String erroObs,
-//			String dataHora, String gravidade) {
-//
-//	}
-//
-//	@Test
-//	public static JSONObject getJSONMessageToSlack(String message) {
-//
-//	}
-//
-//	@Test
-//	public static PostMethod getPostMessageToSlack(JSONObject json) {
-//
-//	}
-//
-//	@Test
-//	public static void sendSlackMessage(String message) {
-//
-//	}
-//
-//	@Test
-//	public static void getSlackResponse(HttpClient client, PostMethod post) {
-//
-//	}
-
 	@Test(expected = IllegalArgumentException.class)
 	public void sendSlackMessage_semSuite() {
 		String suite = "";
