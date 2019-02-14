@@ -1,24 +1,21 @@
 package noesis.performancealerts.controller;
 
+import static noesis.performancealerts.utils.Constants.*;
+
 import javax.mail.MessagingException;
-import javax.persistence.NoResultException;
-import static utils.Constants.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import noesis.performancealerts.dao.AlertsJPADAO;
-import noesis.performancealerts.dao.RunJPADAO;
-import noesis.performancealerts.dao.TestJPADAO;
 import noesis.performancealerts.model.Alerts;
-import noesis.performancealerts.model.Run;
 import noesis.performancealerts.model.Test;
 import noesis.performancealerts.model.Violacao;
 import noesis.performancealerts.model.ViolacaoTipo;
-import utils.Constants;
-import utils.Mail;
-import utils.Slack;
-import utils.Utils;
+import noesis.performancealerts.utils.Constants;
+import noesis.performancealerts.utils.Mail;
+import noesis.performancealerts.utils.Slack;
+import noesis.performancealerts.utils.Utils;
 
 public class AlertsController {
 	static Logger logger = LoggerFactory.getLogger(AlertsController.class.getName());
@@ -33,14 +30,14 @@ public class AlertsController {
 
 		alerts.enviarEmail(texto, v.gravidadeCritica());
 		if (ALERTA_SLACK && !TST_MODE) {
-			String msgErro = messageErroSlack(v);
+			String msgErro = mensagemDeErroSlack(v);
 			String gravidade = v.gravidadeCritica() ? "Crítica" : "Não Crítica";
 			alerts.enviarSlack(idSuite, casoDeTeste, teste.getId(), msgErro, Utils.getDateTime(), gravidade);
 		}
 		atualizarStatusAlerta(alerta);
 	}
 
-	private static String messageErroSlack(Violacao v) {
+	private static String mensagemDeErroSlack(Violacao v) {
 		String msgErro = "";
 		int gravidade = ViolacaoTipo.procurarOpcao(v.getTipoViolacao());
 		switch (gravidade) {

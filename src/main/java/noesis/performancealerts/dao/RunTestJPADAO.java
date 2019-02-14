@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import noesis.performancealerts.model.RunTest;
-import utils.Constants;
+import noesis.performancealerts.utils.Constants;
 
 public class RunTestJPADAO {
 	private static RunTestJPADAO instance;

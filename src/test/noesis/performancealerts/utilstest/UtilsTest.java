@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import utils.Utils;
+import noesis.performancealerts.utils.Utils;
 
 public class UtilsTest {
 

@@ -26,7 +26,7 @@ public class PerformanceAlert {
 			PerformanceAlert pa = new PerformanceAlert();
 			logger.info("[PerformanceAlerts] Iniciando análise de envio de alertas.");
 			List<Test> testes = TestJPADAO.getInstance().findAllTestsByProject(projectId);// deve resgatar toda as
-			pa.analisarExecucoesDeTeste(testes);
+			pa.analisarTestesDoProjeto(testes);
 			logger.info("[PerformanceAlerts] Fim da análise de envio de alertas.");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -34,7 +34,7 @@ public class PerformanceAlert {
 		}
 	}
 
-	public void analisarExecucoesDeTeste(List<Test> testes) throws MessagingException, UnexpectedException {
+	public void analisarTestesDoProjeto(List<Test> testes) throws MessagingException, UnexpectedException {
 		if (testes != null && !testes.isEmpty()) {
 			for (Iterator iterator = testes.iterator(); iterator.hasNext();) {
 				Test teste = (Test) iterator.next();
@@ -60,7 +60,7 @@ public class PerformanceAlert {
 			int casoDeTesteID = teste.getId();
 			logger.info("[PerformanceAlerts] Validando regras de envio de alertas.");
 			String suiteDeTeste = teste.getTest_cycle_id();
-			Violacao v = Regra.analisaConformidade(runIds, teste);
+			Violacao v = RegraController.analisaConformidade(runIds, teste);
 			if (v != null && v.existeViolacao()) {
 				logger.info("[PerformanceAlerts] Emitindo alerta para caso de teste " + String.valueOf(casoDeTesteID)
 						+ ".");

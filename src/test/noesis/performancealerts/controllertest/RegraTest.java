@@ -6,21 +6,21 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import noesis.performancealerts.controller.Regra;
+import noesis.performancealerts.controller.RegraController;
 import noesis.performancealerts.model.RunTest;
-import utils.Constants;
+import noesis.performancealerts.utils.Constants;
 
 public class RegraTest {
-	Regra regra;
+	RegraController regraController;
 
 	public RegraTest() {
-		regra = new Regra();
+		regraController = new RegraController();
 	}
 
 	@Test
 	public void disponibilidadeOK() {
 		try {
-			assertTrue(regra.disponibilidadeOK(100));
+			assertTrue(regraController.disponibilidadeOK(100));
 		} catch (Exception e) {
 			assert (false);
 		}
@@ -29,7 +29,7 @@ public class RegraTest {
 	@Test
 	public void rangeDisponibilidadeLatencia_0() {
 		try {
-			assertTrue(regra.rangeDisponibilidadeLatencia(0));
+			assertTrue(regraController.rangeDisponibilidadeLatencia(0));
 		} catch (Exception e) {
 			assert (false);
 		}
@@ -38,7 +38,7 @@ public class RegraTest {
 	@Test
 	public void rangeDisponibilidadeLatencia_100() {
 		try {
-			assertTrue(regra.rangeDisponibilidadeLatencia(100));
+			assertTrue(regraController.rangeDisponibilidadeLatencia(100));
 		} catch (Exception e) {
 			assert (false);
 		}
@@ -47,7 +47,7 @@ public class RegraTest {
 	@Test
 	public void rangeDisponibilidadeLatencia_numeroNegativo() {
 		try {
-			regra.rangeDisponibilidadeLatencia(-7);
+			regraController.rangeDisponibilidadeLatencia(-7);
 			assert (false);
 		} catch (Exception e) {
 			assert (true);
@@ -57,7 +57,7 @@ public class RegraTest {
 	@Test
 	public void rangeDisponibilidadeLatencia_numeroMaiorQueCem() {
 		try {
-			regra.rangeDisponibilidadeLatencia(101);
+			regraController.rangeDisponibilidadeLatencia(101);
 			assert (false);
 		} catch (Exception e) {
 			assert (true);
@@ -67,7 +67,7 @@ public class RegraTest {
 	@Test
 	public void disponibilidadeOKTest_numeroNegativo() {
 		try {
-			regra.disponibilidadeOK(-7);
+			regraController.disponibilidadeOK(-7);
 			assert (false);
 		} catch (Exception e) {
 			assert (true);
@@ -77,7 +77,7 @@ public class RegraTest {
 	@Test
 	public void disponibilidadeOKTest_numeroMaiorQueCem() {
 		try {
-			regra.disponibilidadeOK(101);
+			regraController.disponibilidadeOK(101);
 			assert (false);
 		} catch (Exception e) {
 			assert (true);
@@ -87,7 +87,7 @@ public class RegraTest {
 	@Test
 	public void disponibilidadeCritica() {
 		try {
-			assertTrue(regra.disponibilidadeCritica(Constants.THRESHOLD_DISPONIBILIDADE_MINIMA - 0.1));
+			assertTrue(regraController.disponibilidadeCritica(Constants.THRESHOLD_DISPONIBILIDADE_MINIMA - 0.1));
 		} catch (Exception e) {
 			assert (false);
 		}
@@ -95,27 +95,27 @@ public class RegraTest {
 
 	@Test
 	public void latenciaCritica() throws Exception {
-		assertTrue(regra.latenciaCritica(Constants.THRESHOLD_LATENCIA_MINIMA - 0.1));
+		assertTrue(regraController.latenciaCritica(Constants.THRESHOLD_LATENCIA_MINIMA - 0.1));
 	}
 
 	@Test
 	public void latenciaCritica_minima() throws Exception {
-		assertFalse(regra.latenciaCritica(Constants.THRESHOLD_LATENCIA_MINIMA));
+		assertFalse(regraController.latenciaCritica(Constants.THRESHOLD_LATENCIA_MINIMA));
 	}
 
 	@Test
 	public void latenciaOK() throws Exception {
-		assertTrue(regra.latenciaOK(Constants.THRESHOLD_LATENCIA));
+		assertTrue(regraController.latenciaOK(Constants.THRESHOLD_LATENCIA));
 	}
 
 	@Test
 	public void latenciaNOK() throws Exception {
-		assertFalse(regra.latenciaOK(Constants.THRESHOLD_LATENCIA_MINIMA - 0.1));
+		assertFalse(regraController.latenciaOK(Constants.THRESHOLD_LATENCIA_MINIMA - 0.1));
 	}
 
 	@Test
 	public void getDisponibilidade_JornadaVazia() throws Exception {
 
-		assertEquals(new Double(100), (double) regra.getDisponibilidade(new ArrayList<RunTest>()), 0);
+		assertEquals(new Double(100), (double) regraController.getDisponibilidade(new ArrayList<RunTest>()), 0);
 	}
 }

@@ -5,7 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Table;
 
-import utils.Utils;
+import noesis.performancealerts.utils.Utils;
 
 import javax.persistence.Column;
 import javax.persistence.Id;

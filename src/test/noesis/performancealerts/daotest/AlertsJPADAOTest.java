@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import noesis.performancealerts.dao.AlertsJPADAO;
 import noesis.performancealerts.model.Alerts;
-import utils.Constants;
+import noesis.performancealerts.utils.Constants;
 
 public class AlertsJPADAOTest {
 

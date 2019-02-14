@@ -7,7 +7,7 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import utils.Slack;
+import noesis.performancealerts.utils.Slack;
 
 public class SlackTest {
 	@Test(expected = IllegalArgumentException.class)

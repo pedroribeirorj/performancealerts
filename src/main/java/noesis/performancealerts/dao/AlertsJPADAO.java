@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import noesis.performancealerts.model.Alerts;
-import utils.Constants;
+import noesis.performancealerts.utils.Constants;
 
 public class AlertsJPADAO {
 	private static AlertsJPADAO instance;

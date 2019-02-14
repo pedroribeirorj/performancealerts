@@ -8,8 +8,8 @@ import javax.mail.Session;
 
 import org.junit.Test;
 
-import utils.Constants;
-import utils.Mail;
+import noesis.performancealerts.utils.Constants;
+import noesis.performancealerts.utils.Mail;
 
 public class MailTest {
 

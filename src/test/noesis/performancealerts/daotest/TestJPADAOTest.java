@@ -14,7 +14,7 @@ import noesis.performancealerts.dao.TestJPADAO;
 import noesis.performancealerts.dao.TestJPADAO;
 import noesis.performancealerts.model.Alerts;
 import noesis.performancealerts.model.Run;
-import utils.Constants;
+import noesis.performancealerts.utils.Constants;
 
 import static org.mockito.Mockito.*;
 

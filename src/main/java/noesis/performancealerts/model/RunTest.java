@@ -51,7 +51,7 @@ public class RunTest {
 	}
 
 	public boolean isPassed() {
-		return status == utils.Constants.STATUS_PASSED;
+		return status == noesis.performancealerts.utils.Constants.STATUS_PASSED;
 	}
 
 }

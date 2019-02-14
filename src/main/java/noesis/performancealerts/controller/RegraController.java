@@ -8,28 +8,26 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import utils.Constants;
-import utils.Utils;
-import noesis.performancealerts.dao.RunJPADAO;
 import noesis.performancealerts.dao.RunTestJPADAO;
-import noesis.performancealerts.model.CasoDeTeste;
 import noesis.performancealerts.model.RunTest;
 import noesis.performancealerts.model.Test;
 import noesis.performancealerts.model.Violacao;
+import noesis.performancealerts.utils.Constants;
+import noesis.performancealerts.utils.Utils;
 
-public class Regra {
-	static Logger logger = LoggerFactory.getLogger(Regra.class.getName());
+public class RegraController {
+	static Logger logger = LoggerFactory.getLogger(RegraController.class.getName());
 
 	public static Violacao analisaConformidade(List<Integer> runIds, Test teste) throws UnexpectedException {
 		// analisa se há inconformidade para um caso de teste de uma suíte considerando
 		// um volume amostral e regras de negócio
-		Regra r = new Regra();
+		RegraController r = new RegraController();
 		if (teste == null)
 			return null;
 
 		List<RunTest> rts = new ArrayList<RunTest>();
 		int idTest = teste.getId();
-		for (Iterator iterator = runIds.iterator(); iterator.hasNext();) {
+		for (Iterator<Integer> iterator = runIds.iterator(); iterator.hasNext();) {
 			int idRun = (Integer) iterator.next();
 			List<RunTest> rt = RunTestJPADAO.getInstance().findByRunAndTest(idRun, idTest);
 			if (rt.size() == 1)
@@ -61,7 +59,7 @@ public class Regra {
 		int contador = 0;
 		int maxFalhasOcorridas = 0;
 		boolean naoEstourouLimite = false;
-		for (Iterator iterator = rts.iterator(); iterator.hasNext();) {
+		for (Iterator<RunTest> iterator = rts.iterator(); iterator.hasNext();) {
 			RunTest rt = (RunTest) iterator.next();
 			if (rt.getStatus() == Constants.STATUS_FAILED) {
 				contador++;
@@ -85,7 +83,7 @@ public class Regra {
 		if (totalCasos == 0)
 			return 100.00;
 
-		for (Iterator iterator = rts.iterator(); iterator.hasNext();) {
+		for (Iterator<RunTest> iterator = rts.iterator(); iterator.hasNext();) {
 			RunTest rt = (RunTest) iterator.next();
 			if (rt.isPassed()) {
 				contadorPassed++;

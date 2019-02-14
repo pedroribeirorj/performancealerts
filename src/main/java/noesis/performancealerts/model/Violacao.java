@@ -1,6 +1,6 @@
 package noesis.performancealerts.model;
 
-import utils.Constants;
+import noesis.performancealerts.utils.Constants;
 
 public class Violacao {
 	int tipoViolacao;

@@ -1,6 +1,7 @@
-package utils;
+package noesis.performancealerts.utils;
 
-import static utils.Constants.*;
+import static noesis.performancealerts.utils.Constants.*;
+
 import java.io.IOException;
 
 import org.apache.commons.httpclient.HttpClient;

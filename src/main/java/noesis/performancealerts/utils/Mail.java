@@ -1,4 +1,4 @@
-package utils;
+package noesis.performancealerts.utils;
 
 import java.util.Properties;
 import javax.mail.Address;

@@ -38,8 +38,8 @@ public class PerformanceAlertTest {
 	public void analisarSuites_suitesVazias() {
 		try {
 			List<noesis.performancealerts.model.Test> testes = null;
-			performanceAlert.analisarExecucoesDeTeste(testes);
-			performanceAlert.analisarExecucoesDeTeste(new ArrayList<noesis.performancealerts.model.Test>());
+			performanceAlert.analisarTestesDoProjeto(testes);
+			performanceAlert.analisarTestesDoProjeto(new ArrayList<noesis.performancealerts.model.Test>());
 			assert (true);
 		} catch (Exception e) {
 			assert (false);
@@ -52,7 +52,7 @@ public class PerformanceAlertTest {
 			noesis.performancealerts.model.Test t = TestJPADAO.getInstance().getAnyTest();
 			List<noesis.performancealerts.model.Test> testes = new ArrayList<noesis.performancealerts.model.Test>();
 			testes.add(t);
-			performanceAlert.analisarExecucoesDeTeste(testes);
+			performanceAlert.analisarTestesDoProjeto(testes);
 			assert (true);
 		} catch (Exception e) {
 			assert (false);

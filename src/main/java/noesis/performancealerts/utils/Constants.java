@@ -1,4 +1,4 @@
-package utils;
+package noesis.performancealerts.utils;
 
 import noesis.performancealerts.model.RunTest;
 

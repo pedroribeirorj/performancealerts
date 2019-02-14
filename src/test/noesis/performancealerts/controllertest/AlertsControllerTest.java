@@ -12,8 +12,9 @@ import noesis.performancealerts.dao.TestJPADAO;
 import noesis.performancealerts.model.Alerts;
 import noesis.performancealerts.model.Run;
 import noesis.performancealerts.model.Violacao;
-import utils.Constants;
-import utils.Mail;
+import noesis.performancealerts.utils.Constants;
+import noesis.performancealerts.utils.Mail;
+
 import static org.mockito.Mockito.*;
 
 public class AlertsControllerTest {
