@@ -18,6 +18,7 @@ public class RunTestJPADAOTest {
 
 	static RunTest runTest;
 	static RunTestJPADAO dao;
+	public static boolean persistido;
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
@@ -25,28 +26,34 @@ public class RunTestJPADAOTest {
 
 	@AfterClass
 	public static void tearDownClass() throws Exception {
-		dao.remove(dao.getById(-1));
+
 	}
 
 	@Before
 	public void setUp() {
 		runTest = new RunTest();
-		runTest.setId(-1);
-		runTest.setIdRun(-1);
-		runTest.setIdTest(-1);
+		runTest.setIdRun(RunJPADAO.getInstance().getAnyRun().getIdRun());
+		runTest.setIdTest(TestJPADAO.getInstance().getAnyTest().getId());
 		runTest.setStatus(1);
 		dao = RunTestJPADAO.getInstance();
+		persistido = false;
 	}
 
 	@After
 	public void tearDown() {
+		if (persistido) {
+			dao.removeById(dao.findLastRunTest().getId());
+			persistido = false;
+		}
 	}
 
 	@Test
 	public void persist() {
 		try {
-			if (runTest != null)
+			if (runTest != null) {
 				dao.persist(runTest);
+				persistido = true;
+			}
 			assert (true);
 		} catch (Exception e) {
 			assert (false);

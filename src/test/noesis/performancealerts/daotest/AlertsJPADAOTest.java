@@ -11,6 +11,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import noesis.performancealerts.dao.AlertsJPADAO;
+import noesis.performancealerts.dao.RunJPADAO;
+import noesis.performancealerts.dao.TestJPADAO;
 import noesis.performancealerts.model.Alerts;
 import noesis.performancealerts.utils.Constants;
 
@@ -18,6 +20,7 @@ public class AlertsJPADAOTest {
 
 	static Alerts alert;
 	static AlertsJPADAO dao;
+	public static boolean persistido;
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
@@ -31,23 +34,28 @@ public class AlertsJPADAOTest {
 	public void setUp() {
 		alert = new Alerts();
 		alert.setData(String.valueOf(new Timestamp(System.currentTimeMillis())));
-		alert.setId(-1);
-		alert.setIdTest(1);
+		alert.setIdTest(TestJPADAO.getInstance().getAnyTest().getId());
+		alert.setIdLastRun(RunJPADAO.getInstance().getAnyRun().getIdRun());
 		alert.setSeverity(String.valueOf(Constants.GRAVIDADE_VIOLACAO_CRITICA));
 		alert.setTypeError(String.valueOf(Constants.VIOLACAO_POR_INDISPONIBILIDADE));
 		alert.setValue("0");
-		alert.setId(-1);
 		dao = AlertsJPADAO.getInstance();
+		persistido = false;
 	}
 
 	@After
 	public void tearDown() {
+		if (persistido) {
+			dao.removeById(dao.findLastAlert().getId());
+			persistido = false;
+		}
 	}
 
 	@Test
 	public void persist() {
 		try {
 			dao.persist(alert);
+			persistido = true;
 			assert (true);
 		} catch (Exception e) {
 			assert (false);
@@ -79,34 +87,36 @@ public class AlertsJPADAOTest {
 			assert (false);
 		}
 	}
-	@Test
-	public void remove() {
-		alert = new Alerts();
-		alert.setData(String.valueOf(new Timestamp(System.currentTimeMillis())));
-		alert.setId(-1);
-		alert.setIdTest(1);
-		alert.setSeverity(String.valueOf(Constants.GRAVIDADE_VIOLACAO_CRITICA));
-		alert.setTypeError(String.valueOf(Constants.VIOLACAO_POR_INDISPONIBILIDADE));
-		alert.setValue("0");
-		alert.setId(-1);
-		dao = AlertsJPADAO.getInstance();
-		dao.persist(alert);
-		dao.remove(alert);
-		assert(true);
-	}
-	@Test
-	public void removeById() {
-		alert = new Alerts();
-		alert.setData(String.valueOf(new Timestamp(System.currentTimeMillis())));
-		alert.setId(-1);
-		alert.setIdTest(1);
-		alert.setSeverity(String.valueOf(Constants.GRAVIDADE_VIOLACAO_CRITICA));
-		alert.setTypeError(String.valueOf(Constants.VIOLACAO_POR_INDISPONIBILIDADE));
-		alert.setValue("0");
-		alert.setId(-1);
-		dao = AlertsJPADAO.getInstance();
-		dao.persist(alert);
-		dao.removeById(alert.getId());
-		assert(true);
-	}
+
+//	@Test
+//	public void remove() {
+//		alert = new Alerts();
+//		alert.setData(String.valueOf(new Timestamp(System.currentTimeMillis())));
+//		alert.setId(-1);
+//		alert.setIdTest(1);
+//		alert.setSeverity(String.valueOf(Constants.GRAVIDADE_VIOLACAO_CRITICA));
+//		alert.setTypeError(String.valueOf(Constants.VIOLACAO_POR_INDISPONIBILIDADE));
+//		alert.setValue("0");
+//		alert.setId(-1);
+//		dao = AlertsJPADAO.getInstance();
+//		dao.persist(alert);
+//		dao.remove(alert);
+//		assert (true);
+//	}
+//
+//	@Test
+//	public void removeById() {
+//		alert = new Alerts();
+//		alert.setData(String.valueOf(new Timestamp(System.currentTimeMillis())));
+//		alert.setId(-1);
+//		alert.setIdTest(1);
+//		alert.setSeverity(String.valueOf(Constants.GRAVIDADE_VIOLACAO_CRITICA));
+//		alert.setTypeError(String.valueOf(Constants.VIOLACAO_POR_INDISPONIBILIDADE));
+//		alert.setValue("0");
+//		alert.setId(-1);
+//		dao = AlertsJPADAO.getInstance();
+//		dao.persist(alert);
+//		dao.removeById(alert.getId());
+//		assert (true);
+//	}
 }

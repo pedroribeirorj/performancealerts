@@ -5,8 +5,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Table;
 
-import noesis.performancealerts.utils.Utils;
-
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;

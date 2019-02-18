@@ -60,7 +60,7 @@ public class RegraController {
 		int maxFalhasOcorridas = 0;
 		boolean naoEstourouLimite = false;
 		for (Iterator<RunTest> iterator = rts.iterator(); iterator.hasNext();) {
-			RunTest rt = (RunTest) iterator.next();
+			RunTest rt = iterator.next();
 			if (rt.getStatus() == Constants.STATUS_FAILED) {
 				contador++;
 			} else {
@@ -84,7 +84,7 @@ public class RegraController {
 			return 100.00;
 
 		for (Iterator<RunTest> iterator = rts.iterator(); iterator.hasNext();) {
-			RunTest rt = (RunTest) iterator.next();
+			RunTest rt = iterator.next();
 			if (rt.isPassed()) {
 				contadorPassed++;
 			}

@@ -17,7 +17,8 @@ public class Slack {
 
 	private String buildSlackMessage(String suite, String jornada, int idExecucao, String erroObs,
 			String dataHora, String gravidade) {
-		return String.format(MSG_FORMAT_SLACK, suite, jornada, idExecucao, erroObs, dataHora, gravidade,
+		String strFormat = "Suíte: %s\n Jornada: %s\n ID: %s\n Erro: %s\n Data/Hora: %s\n Gravidade: %s";
+		return String.format(strFormat, suite, jornada, idExecucao, erroObs, dataHora, gravidade,
 				"#" + Constants.CHANNEL_NAME_SLACK);
 	}
 
@@ -71,7 +72,7 @@ public class Slack {
 		if (suite == null || suite.isEmpty() )
 			throw new IllegalArgumentException(
 					"[PerformanceAlert] Suíte não informado para envio de mensageria Slack.");
-		if (gravidade == null || casoDeTeste.isEmpty())
+		if (casoDeTeste.isEmpty())
 			throw new IllegalArgumentException(
 					"[PerformanceAlert] Nome do caso de teste não informado para envio de mensageria Slack.");
 		if (gravidade == null || gravidade.isEmpty())

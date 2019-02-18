@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import noesis.performancealerts.model.Alerts;
+import noesis.performancealerts.model.RunTest;
 import noesis.performancealerts.utils.Constants;
 
 public class AlertsJPADAO {
@@ -104,5 +105,11 @@ public class AlertsJPADAO {
 		} catch (Exception ex) {
 			logger.error(ex.getMessage());
 		}
+	}
+	
+	public Alerts findLastAlert() {
+		Query q = entityManager
+				.createQuery("FROM " + Alerts.class.getName() + " order by id desc");
+		return (Alerts) q.getResultList().get(0);
 	}
 }

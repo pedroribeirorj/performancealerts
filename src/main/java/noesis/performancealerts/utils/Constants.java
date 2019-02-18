@@ -62,5 +62,4 @@ public class Constants {
 	public static final String CHANNEL_NAME_SLACK = "#noesismessengertest";
 	public static final String TEAM_NAME_SLACK = "tim-noesis";
 	public static final String USERNAME_SLACK = "Pedro Ribeiro";
-	public static String MSG_FORMAT_SLACK = "Suíte: %s\n Jornada: %s\n ID: %s\n Erro: %s\n Data/Hora: %s\n Gravidade: %s";
 }

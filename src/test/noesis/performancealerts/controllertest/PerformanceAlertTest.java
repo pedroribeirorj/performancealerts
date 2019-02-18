@@ -90,9 +90,9 @@ public class PerformanceAlertTest {
 			List<Integer> testes = new ArrayList<Integer>();
 			testes.add(661);
 			performanceAlert.analisarExecucoesDoCasoDeTeste(t, testes);
-			assert (true);
-		} catch (Exception e) {
 			assert (false);
+		} catch (Exception e) {
+			assert (true);
 		}
 	}
 

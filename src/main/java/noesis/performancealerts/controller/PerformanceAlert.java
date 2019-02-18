@@ -29,7 +29,6 @@ public class PerformanceAlert {
 			pa.analisarTestesDoProjeto(testes);
 			logger.info("[PerformanceAlerts] Fim da análise de envio de alertas.");
 		} catch (Exception e) {
-			e.printStackTrace();
 			logger.error("[PerformanceAlerts] Erro no módulo de alertas: %s", e.getMessage());
 		}
 	}
@@ -43,12 +42,13 @@ public class PerformanceAlert {
 				logger.info("[PerformanceAlerts] Identificando caso de teste " + teste.getName_test() + ".");
 				// Recuperar os ids das últimas execuções do caso de teste
 				List<Integer> runsIds = RunTestJPADAO.getInstance().findLastsRunsByTestID(teste.getId());
-				if (runsIds.size() > 0) {
+				if (!runsIds.isEmpty()) {
 					int ultimaExecucaoAvaliada = runsIds.get(runsIds.size() - 1);
-					if (AlertsJPADAO.getInstance().findRunsByTestID(teste.getId(), ultimaExecucaoAvaliada).size() == 0)
+					if (AlertsJPADAO.getInstance().findRunsByTestID(teste.getId(), ultimaExecucaoAvaliada).isEmpty())
 						analisarExecucoesDoCasoDeTeste(teste, runsIds);
-				} else
+				} else {
 					logger.info("[PerformanceAlerts] Execuções já analisadas anteriormente.");
+				}
 				logger.info("[PerformanceAlerts] Fim de análise de caso de teste " + teste.getName_test() + ".");
 			}
 		}
@@ -65,12 +65,12 @@ public class PerformanceAlert {
 			Violacao v = RegraController.analisaConformidade(runIds, teste);
 			if (v != null && v.existeViolacao()) {
 				logger.info("[PerformanceAlerts] Violação de regra identificada.");
-				logger.info("[PerformanceAlerts] Emitindo alerta para caso de teste " + String.valueOf(casoDeTesteID)
-						+ ".");
+				logger.info("[PerformanceAlerts] Emitindo alerta para caso de teste " + casoDeTesteID + ".");
 				AlertsController.emitirAlerta(teste, v, lastRun);
 			} else {
-				logger.info("[PerformanceAlerts] Caso de teste " + teste.getName_test() + " da suite " + suiteDeTeste
-						+ " não apresenta violações de regras.");
+				String msgLog = "[PerformanceAlerts] Caso de teste " + teste.getName_test() + " da suite "
+						+ suiteDeTeste + " não apresenta violações de regras.";
+				logger.info(msgLog);
 			}
 		}
 	}

@@ -24,9 +24,11 @@ public class AlertsControllerTest {
 			Run suite = RunJPADAO.getInstance().getAnyRun();
 			noesis.performancealerts.model.Test ct = (noesis.performancealerts.model.Test) TestJPADAO.getInstance()
 					.getAnyTest();
+			ct.setId(-1);
 			if (suite != null && ct != null) {
-				AlertsController.emitirAlerta(ct, mock(Violacao.class), 1);
+				AlertsController.emitirAlerta(ct, mock(Violacao.class), 0);
 			}
+			
 			assert (true);
 		} catch (Exception e) {
 			assert (true);
@@ -53,5 +55,6 @@ public class AlertsControllerTest {
 			assert (false);
 		}
 	}
+	
 
 }
