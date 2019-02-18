@@ -40,14 +40,16 @@ public class PerformanceAlert {
 				Test teste = (Test) iterator.next();
 				// identificando as execuções do teste
 				logger.info("--------------------------------------------------------------------------");
-				logger.info("[PerformanceAlerts] Identificando casos de teste " + teste.getName_test() + ".");
+				logger.info("[PerformanceAlerts] Identificando caso de teste " + teste.getName_test() + ".");
 				// Recuperar os ids das últimas execuções do caso de teste
 				List<Integer> runsIds = RunTestJPADAO.getInstance().findLastsRunsByTestID(teste.getId());
 				if (runsIds.size() > 0) {
 					int ultimaExecucaoAvaliada = runsIds.get(runsIds.size() - 1);
 					if (AlertsJPADAO.getInstance().findRunsByTestID(teste.getId(), ultimaExecucaoAvaliada).size() == 0)
 						analisarExecucoesDoCasoDeTeste(teste, runsIds);
-				}
+				} else
+					logger.info("[PerformanceAlerts] Execuções já analisadas anteriormente.");
+				logger.info("[PerformanceAlerts] Fim de análise de caso de teste " + teste.getName_test() + ".");
 			}
 		}
 	}
@@ -62,6 +64,7 @@ public class PerformanceAlert {
 			String suiteDeTeste = teste.getTest_cycle_id();
 			Violacao v = RegraController.analisaConformidade(runIds, teste);
 			if (v != null && v.existeViolacao()) {
+				logger.info("[PerformanceAlerts] Violação de regra identificada.");
 				logger.info("[PerformanceAlerts] Emitindo alerta para caso de teste " + String.valueOf(casoDeTesteID)
 						+ ".");
 				AlertsController.emitirAlerta(teste, v, lastRun);
