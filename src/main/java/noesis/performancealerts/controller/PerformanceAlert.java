@@ -25,11 +25,14 @@ public class PerformanceAlert {
 		try {
 			PerformanceAlert pa = new PerformanceAlert();
 			logger.info("[PerformanceAlerts] Iniciando análise de envio de alertas.");
-			List<Test> testes = TestJPADAO.getInstance().findAllTestsByProject(projectId);// deve resgatar toda as
+			// resgata todos os testes do projeto
+			
+			//melhoria -- resgatar todos os casos do projeto e que possua runTest
+			List<Test> testes = TestJPADAO.getInstance().findAllTestsByProject(projectId);
 			pa.analisarTestesDoProjeto(testes);
 			logger.info("[PerformanceAlerts] Fim da análise de envio de alertas.");
 		} catch (Exception e) {
-			logger.error("[PerformanceAlerts] Erro no módulo de alertas: %s", e.getMessage());
+			logger.error("[PerformanceAlerts] Erro no módulo de alertas: "+e.getMessage());
 		}
 	}
 

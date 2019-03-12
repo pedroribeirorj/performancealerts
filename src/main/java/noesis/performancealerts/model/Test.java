@@ -35,6 +35,18 @@ public class Test {
 	String username;
 	@Column(name = "project_id")
 	String projectId;
+	@Column
+	String threshold;
+
+	public String getThreshold() {
+		if(threshold == null)
+			threshold="";
+		return threshold;
+	}
+
+	public void setThreshold(String threshold) {
+		this.threshold = threshold;
+	}
 
 	public int getId() {
 		return id;

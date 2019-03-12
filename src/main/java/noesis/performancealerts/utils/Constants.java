@@ -8,7 +8,7 @@ public class Constants {
 
 	// evitar envio de emails, slack e persistências
 	public static final boolean TST_MODE = false;
-	public static final boolean ALERTA_SLACK = false;
+	public static final boolean ALERTA_SLACK = true;
 
 	// limites
 	public static final int MAXIMO_FALHAS_SEGUIDAS_PERMITIDAS = 3;

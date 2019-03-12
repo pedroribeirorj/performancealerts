@@ -17,6 +17,18 @@ public class RunTest {
 	int idRun;
 	@Column
 	int status;
+	@Column
+	String executionTime;
+
+	public String getExecutionTime() {
+		if(executionTime == null)
+			executionTime="";
+		return executionTime;
+	}
+
+	public void setExecutionTime(String executionTime) {
+		this.executionTime = executionTime;
+	}
 
 	public int getId() {
 		return id;

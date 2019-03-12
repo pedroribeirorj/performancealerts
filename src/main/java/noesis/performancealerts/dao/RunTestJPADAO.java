@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import noesis.performancealerts.model.RunTest;
 import noesis.performancealerts.utils.Constants;
+import noesis.performancealerts.utils.Utils;
 
 public class RunTestJPADAO {
 	private static RunTestJPADAO instance;
@@ -56,10 +57,17 @@ public class RunTestJPADAO {
 		q.setParameter(fieldIdTest, idTest);
 		return q.getResultList();
 	}
-	
-	public RunTest findLastRunTest() {
+
+	public List<RunTest> findByRunsAndTest(List<Integer> idsRun, int idTest) {
+		String sql = "FROM " + RunTest.class.getName() + " where idRun in "+Utils.getListaString(idsRun)+" and idTest=:idTest order by id desc";
 		Query q = entityManager
-				.createQuery("FROM " + RunTest.class.getName() + " order by id desc");
+				.createQuery(sql);
+		q.setParameter(fieldIdTest, idTest);
+		return q.getResultList();
+	}
+
+	public RunTest findLastRunTest() {
+		Query q = entityManager.createQuery("FROM " + RunTest.class.getName() + " order by id desc");
 		return (RunTest) q.getResultList().get(0);
 	}
 
