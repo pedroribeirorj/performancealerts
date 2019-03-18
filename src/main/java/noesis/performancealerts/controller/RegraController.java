@@ -74,8 +74,8 @@ public class RegraController {
 		if (t.getThreshold().isEmpty())
 			return null;
 		double latencia = calculaLatencia(rts, t);
-		
-		if (latencia ==-1 || latenciaOK(latencia))
+
+		if (latencia == -1 || latenciaOK(latencia))
 			return null;
 		else {
 			if (latenciaCritica(latencia)) {
@@ -90,7 +90,8 @@ public class RegraController {
 	private double calculaLatencia(List<RunTest> rts, Test t) {
 		/*
 		 * Se caso teve sucesso e o tempo de execução foi maior do que o esperado, então
-		 * houve erro de latencia
+		 * houve erro de latencia Método retorna o percentual de acerto da latencia,
+		 * assim como o dashboard
 		 */
 
 		if (rts.isEmpty() || t == null)
@@ -110,7 +111,7 @@ public class RegraController {
 			}
 		}
 		if (total != 0) {
-			return ((double) erroLatencia / total) * 100;
+			return (1 - (double) erroLatencia / total) * 100;
 		}
 		logger.info("Nenhum caso obteve sucesso para que a latência seja calculada para o teste " + t.getDescription()
 				+ ".");
@@ -119,21 +120,15 @@ public class RegraController {
 
 	public int getSequenciaErros(List<RunTest> rts) {
 		int contador = 0;
-		int maxFalhasOcorridas = 0;
-		boolean naoEstourouLimite = false;
 		for (Iterator<RunTest> iterator = rts.iterator(); iterator.hasNext();) {
 			RunTest rt = iterator.next();
 			if (rt.getStatus() == Constants.STATUS_FAILED) {
 				contador++;
 			} else {
 				contador = 0;
-				if (maxFalhasOcorridas > Constants.MAXIMO_FALHAS_SEGUIDAS_PERMITIDAS) {
-					return maxFalhasOcorridas;
-				}
 			}
-			if (contador > Constants.MAXIMO_FALHAS_SEGUIDAS_PERMITIDAS && !naoEstourouLimite) {
-				maxFalhasOcorridas = contador;
-				naoEstourouLimite = !naoEstourouLimite;
+			if (contador > Constants.MAXIMO_FALHAS_SEGUIDAS_PERMITIDAS) {
+				return contador;
 			}
 		}
 		return -1;

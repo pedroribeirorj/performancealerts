@@ -46,6 +46,9 @@ public class PerformanceAlert {
 				// Recuperar os ids das últimas execuções do caso de teste
 				List<Integer> runsIds = RunTestJPADAO.getInstance().findLastsRunsByTestID(teste.getId());
 				if (!runsIds.isEmpty()) {
+					//Do grupo mais recente, ele pega o caso de menor número.
+					/*Exemplo: casos de 1 a 100, pegará o número 1 
+					 */
 					int ultimaExecucaoAvaliada = runsIds.get(runsIds.size() - 1);
 					if (AlertsJPADAO.getInstance().findRunsByTestID(teste.getId(), ultimaExecucaoAvaliada).isEmpty())
 						analisarExecucoesDoCasoDeTeste(teste, runsIds);
@@ -59,6 +62,8 @@ public class PerformanceAlert {
 
 	public void analisarExecucoesDoCasoDeTeste(Test teste, List<Integer> runIds)
 			throws MessagingException, UnexpectedException {
+//		if(teste.getId()==34)
+//			logger.info("f");
 		// para cada teste, analisa violação de regras
 		if (teste != null && runIds != null && !runIds.isEmpty()) {
 			int lastRun = runIds.get(runIds.size() - 1);
