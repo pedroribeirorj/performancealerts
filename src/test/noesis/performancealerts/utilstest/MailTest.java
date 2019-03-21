@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import java.util.Properties;
 
 import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.Session;
 
 import org.junit.Test;
@@ -14,10 +15,10 @@ import noesis.performancealerts.utils.Mail;
 public class MailTest {
 
 	@Test
-	public void enviarEmail() throws Exception {		
-		String corpo = "EMAIL DE TESTE UNITÁRIO";
-		String destinatarios = "pedro.h.silva@noesis.pt";
-		String assunto = "TESTE UNITARIO";
+	public void enviarEmail() throws MessagingException {		
+		final String corpo = "EMAIL DE TESTE UNITÁRIO";
+		final String destinatarios = "pedro.h.silva@noesis.pt";
+		final String assunto = "TESTE UNITARIO";
 		Mail.enviarEmail(corpo, destinatarios, assunto, Constants.MAIL_DEBUG_MODE);
 	}
 
@@ -44,7 +45,7 @@ public class MailTest {
 			String destinatarios = "pedro.h.silva@noesis.pt";
 			String assunto = "TESTE UNITARIO";
 			Session s = Mail.getSession(Mail.getProperties(), "TimNoesis");
-			Message msg = Mail.montarMensagem(s, remetente, destinatarios, assunto, corpo);
+			Mail.montarMensagem(s, remetente, destinatarios, assunto, corpo);
 			assert (false);
 		} catch (Exception e) {
 			assert (true);
@@ -59,7 +60,7 @@ public class MailTest {
 			String destinatarios = "pedro.h.silva@noesis.pt";
 			String assunto = "TESTE UNITARIO";
 			Session s = Mail.getSession(Mail.getProperties(), "TimNoesis");
-			Message msg = Mail.montarMensagem(s, remetente, destinatarios, assunto, corpo);
+			Mail.montarMensagem(s, remetente, destinatarios, assunto, corpo);
 			assert (false);
 		} catch (Exception e) {
 			assert (true);
@@ -74,7 +75,7 @@ public class MailTest {
 			String destinatarios = "";
 			String assunto = "TESTE UNITARIO";
 			Session s = Mail.getSession(Mail.getProperties(), "TimNoesis");
-			Message msg = Mail.montarMensagem(s, remetente, destinatarios, assunto, corpo);
+			Mail.montarMensagem(s, remetente, destinatarios, assunto, corpo);
 			assert (false);
 		} catch (Exception e) {
 			assert (true);
@@ -89,7 +90,7 @@ public class MailTest {
 			String destinatarios = "pedro.h.silva@noesis.pt";
 			String assunto = "";
 			Session s = Mail.getSession(Mail.getProperties(), "TimNoesis");
-			Message msg = Mail.montarMensagem(s, remetente, destinatarios, assunto, corpo);
+			Mail.montarMensagem(s, remetente, destinatarios, assunto, corpo);
 			assert (false);
 		} catch (Exception e) {
 			assert (true);
@@ -99,7 +100,6 @@ public class MailTest {
 	@Test
 	public void getSession() {
 		try {
-			String destinatarios = "pedro.h.silva@noesis.pt";
 			Session s = Mail.getSession(Mail.getProperties(), "TimNoesis");
 			assertNotEquals(s, null);
 		} catch (Exception e) {

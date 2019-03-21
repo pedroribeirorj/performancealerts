@@ -1,7 +1,6 @@
 package noesis.performancealerts.controller;
 
 import java.rmi.UnexpectedException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -18,7 +17,7 @@ import noesis.performancealerts.utils.Utils;
 public class RegraController {
 	static Logger logger = LoggerFactory.getLogger(RegraController.class.getName());
 
-	public static Violacao analisaConformidade(List<Integer> runIds, Test t) throws UnexpectedException {
+	public static Violacao analisaConformidade(List<Integer> runIds, Test t) {
 		// analisa se há inconformidade para um caso de teste de uma suíte considerando
 		// um volume amostral e regras de negócio
 		RegraController r = new RegraController();
@@ -51,7 +50,7 @@ public class RegraController {
 		return null;
 	}
 
-	private static List<RunTest> atualizaRunTest(List<RunTest> rt, List<RunTest> rts) throws UnexpectedException {
+	static List<RunTest> atualizaRunTest(List<RunTest> rt, List<RunTest> rts) throws UnexpectedException {
 		switch (rt.size()) {
 		case 1:
 			rts.add(rt.get(0));

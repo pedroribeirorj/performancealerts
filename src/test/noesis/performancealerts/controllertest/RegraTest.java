@@ -94,28 +94,28 @@ public class RegraTest {
 	}
 
 	@Test
-	public void latenciaCritica() throws Exception {
+	public void latenciaCritica()  {
 		assertTrue(regraController.latenciaCritica(Constants.THRESHOLD_LATENCIA_MINIMA - 0.1));
 	}
 
 	@Test
-	public void latenciaCritica_minima() throws Exception {
+	public void latenciaCritica_minima()  {
 		assertFalse(regraController.latenciaCritica(Constants.THRESHOLD_LATENCIA_MINIMA));
 	}
 
 	@Test
-	public void latenciaOK() throws Exception {
+	public void latenciaOK() {
 		assertTrue(regraController.latenciaOK(Constants.THRESHOLD_LATENCIA));
 	}
 
 	@Test
-	public void latenciaNOK() throws Exception {
+	public void latenciaNOK() {
 		assertFalse(regraController.latenciaOK(Constants.THRESHOLD_LATENCIA_MINIMA - 0.1));
 	}
 
 	@Test
-	public void getDisponibilidade_JornadaVazia() throws Exception {
+	public void getDisponibilidade_JornadaVazia() {
 
-		assertEquals(new Double(100), (double) regraController.getDisponibilidade(new ArrayList<RunTest>()), 0);
+		assertEquals(100.0, (double) regraController.getDisponibilidade(new ArrayList<RunTest>()), 0);
 	}
 }

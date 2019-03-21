@@ -11,21 +11,20 @@ import org.junit.Test;
 import noesis.performancealerts.dao.RunJPADAO;
 import noesis.performancealerts.dao.RunTestJPADAO;
 import noesis.performancealerts.dao.TestJPADAO;
-import noesis.performancealerts.model.Run;
 import noesis.performancealerts.model.RunTest;
 
 public class RunTestJPADAOTest {
 
-	static RunTest runTest;
-	static RunTestJPADAO dao;
+	RunTest runTest;
+	RunTestJPADAO dao;
 	public static boolean persistido;
 
 	@BeforeClass
-	public static void setUpClass() throws Exception {
+	public static void setUpClass() {
 	}
 
 	@AfterClass
-	public static void tearDownClass() throws Exception {
+	public static void tearDownClass() {
 
 	}
 

@@ -36,7 +36,7 @@ public class PerformanceAlert {
 		}
 	}
 
-	public void analisarTestesDoProjeto(List<Test> testes) throws MessagingException, UnexpectedException {
+	public void analisarTestesDoProjeto(List<Test> testes) throws MessagingException {
 		if (testes != null && !testes.isEmpty()) {
 			for (Iterator iterator = testes.iterator(); iterator.hasNext();) {
 				Test teste = (Test) iterator.next();
@@ -61,9 +61,7 @@ public class PerformanceAlert {
 	}
 
 	public void analisarExecucoesDoCasoDeTeste(Test teste, List<Integer> runIds)
-			throws MessagingException, UnexpectedException {
-//		if(teste.getId()==34)
-//			logger.info("f");
+			throws MessagingException {
 		// para cada teste, analisa violação de regras
 		if (teste != null && runIds != null && !runIds.isEmpty()) {
 			int lastRun = runIds.get(runIds.size() - 1);

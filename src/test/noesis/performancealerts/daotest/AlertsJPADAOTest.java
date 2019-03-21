@@ -20,14 +20,14 @@ public class AlertsJPADAOTest {
 
 	static Alerts alert;
 	static AlertsJPADAO dao;
-	public static boolean persistido;
+	public boolean persistido;
 
 	@BeforeClass
-	public static void setUpClass() throws Exception {
+	public static void setUpClass() {
 	}
 
 	@AfterClass
-	public static void tearDownClass() throws Exception {
+	public static void tearDownClass(){
 	}
 
 	@Before
@@ -87,36 +87,4 @@ public class AlertsJPADAOTest {
 			assert (false);
 		}
 	}
-
-//	@Test
-//	public void remove() {
-//		alert = new Alerts();
-//		alert.setData(String.valueOf(new Timestamp(System.currentTimeMillis())));
-//		alert.setId(-1);
-//		alert.setIdTest(1);
-//		alert.setSeverity(String.valueOf(Constants.GRAVIDADE_VIOLACAO_CRITICA));
-//		alert.setTypeError(String.valueOf(Constants.VIOLACAO_POR_INDISPONIBILIDADE));
-//		alert.setValue("0");
-//		alert.setId(-1);
-//		dao = AlertsJPADAO.getInstance();
-//		dao.persist(alert);
-//		dao.remove(alert);
-//		assert (true);
-//	}
-//
-//	@Test
-//	public void removeById() {
-//		alert = new Alerts();
-//		alert.setData(String.valueOf(new Timestamp(System.currentTimeMillis())));
-//		alert.setId(-1);
-//		alert.setIdTest(1);
-//		alert.setSeverity(String.valueOf(Constants.GRAVIDADE_VIOLACAO_CRITICA));
-//		alert.setTypeError(String.valueOf(Constants.VIOLACAO_POR_INDISPONIBILIDADE));
-//		alert.setValue("0");
-//		alert.setId(-1);
-//		dao = AlertsJPADAO.getInstance();
-//		dao.persist(alert);
-//		dao.removeById(alert.getId());
-//		assert (true);
-//	}
 }

@@ -1,11 +1,6 @@
 package noesis.performancealerts.model;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
-
-import noesis.performancealerts.utils.Constants;
-
 public class ViolacaoTest {
 
 	@Test(expected = IllegalArgumentException.class)

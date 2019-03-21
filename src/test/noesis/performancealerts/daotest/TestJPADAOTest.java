@@ -8,29 +8,21 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import noesis.performancealerts.dao.AlertsJPADAO;
-import noesis.performancealerts.dao.RunJPADAO;
 import noesis.performancealerts.dao.TestJPADAO;
-import noesis.performancealerts.dao.TestJPADAO;
-import noesis.performancealerts.model.Alerts;
-import noesis.performancealerts.model.Run;
 import noesis.performancealerts.utils.Constants;
-
-import static org.mockito.Mockito.*;
-
 import java.sql.Timestamp;
 
 public class TestJPADAOTest {
 
-	static noesis.performancealerts.model.Test test;
+	noesis.performancealerts.model.Test test;
 	static TestJPADAO dao;
 
 	@BeforeClass
-	public static void setUpClass() throws Exception {
+	public static void setUpClass() {
 	}
 
 	@AfterClass
-	public static void tearDownClass() throws Exception {
+	public static void tearDownClass() {
 		dao.remove(dao.getById(-1));
 	}
 
